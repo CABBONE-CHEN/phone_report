@@ -1,0 +1,2289 @@
+<html lang="zh"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, user-scalable=yes">
+    <title>iPhone Inspection Report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        /* 基础样式 */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.4;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            margin: 0;
+            padding: 15px;
+            letter-spacing: -0.01em;
+        }
+
+        #report-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #d2d2d7;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* 控制栏样式 - 深蓝专业配色 */
+        #controls {
+            padding: 24px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #controls button {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #controls button:hover {
+            background-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        #lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+
+        #save-html {
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        #save-html:hover {
+            background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+        }
+
+        #export-pdf, #export-all-pdf {
+            background-color: rgba(255,255,255,0.95);
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        #export-pdf:hover, #export-all-pdf:hover {
+            background-color: white;
+        }
+
+        #export-all-pdf {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        #export-all-pdf:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+        }
+
+        /* 报告内容样式 */
+        #report-content {
+            padding: 24px 32px;
+        }
+
+        /* 标题样式 */
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #1e3a8a;
+        }
+
+        .report-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1d1d1f;
+            margin: 0 0 6px 0;
+            letter-spacing: -0.8px;
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .report-header .subtitle {
+            font-size: 14px;
+            color: #86868b;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin: 20px 0 12px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f5f5f7;
+            letter-spacing: -0.5px;
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin: 16px 0 10px 0;
+            padding-left: 10px;
+            border-left: 3px solid #1e3a8a;
+            letter-spacing: -0.3px;
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 10px 0;
+            border: 1px solid #e5e5e7;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(180deg, #f5f5f7 0%, #ebebed 100%);
+            color: #1d1d1f;
+            font-weight: 700;
+            font-size: 12px;
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 2px solid #d2d2d7;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+
+        /* 表头列宽 */
+        th:nth-child(1) {
+            width: 28%;
+        }
+
+        th:nth-child(2) {
+            width: 36%;
+        }
+
+        th:nth-child(3) {
+            width: 36%;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #f5f5f7;
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td.label {
+            background-color: #fafafa;
+            font-weight: 600;
+            color: #515154;
+            width: 25%;
+            letter-spacing: 0.2px;
+        }
+
+        td.value {
+            width: 75%;
+            color: #1d1d1f;
+        }
+
+        /* 检测项目表格的特殊列宽设置 */
+        table thead + tbody td.label {
+            width: 28%;
+        }
+
+        table thead + tbody td.value {
+            width: 36%;
+        }
+
+        /* 问题级别列 - 第三列 */
+        table thead + tbody td.value:last-child {
+            width: 36%;
+        }
+
+        /* 下拉选择器样式 */
+        select.result-select {
+            width: 100%;
+            padding: 6px 28px 6px 10px;
+            border: 1.5px solid #d2d2d7;
+            border-radius: 5px;
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #1d1d1f;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+
+        select.result-select:hover {
+            border-color: #1e3a8a;
+        }
+
+        select.result-select:focus {
+            outline: none;
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        /* 问题级别样式 */
+        .severity-minor {
+            background-color: #fff9e6;
+            color: #996600;
+        }
+        .severity-major {
+            background-color: #ffe6e6;
+            color: #cc0000;
+        }
+        .severity-critical {
+            background-color: #ffcccc;
+            color: #990000;
+            font-weight: 600;
+        }
+
+        /* 综合评估区域 */
+        .conclusion-box {
+            margin: 20px 0;
+            padding: 16px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            border: 2px solid #d2d2d7;
+        }
+
+        .conclusion-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .recommendation-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        .recommendation-recommended {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .recommendation-usable {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            color: white;
+        }
+
+        .recommendation-not-recommended {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: white;
+        }
+
+        /* 问题汇总卡片 */
+        .issue-summary {
+            margin: 16px 0;
+        }
+
+        .issue-card {
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border-left: 3px solid;
+        }
+
+        .issue-card.minor {
+            background-color: #fffbf0;
+            border-color: #ffa500;
+        }
+
+        .issue-card.major {
+            background-color: #fff5f5;
+            border-color: #ff6b6b;
+        }
+
+        .issue-card.critical {
+            background-color: #ffe6e6;
+            border-color: #dc3545;
+        }
+
+        .issue-card-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .issue-card.minor .issue-card-title {
+            color: #cc8400;
+        }
+
+        .issue-card.major .issue-card-title {
+            color: #e85555;
+        }
+
+        .issue-card.critical .issue-card-title {
+            color: #c92a2a;
+        }
+
+        .issue-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #515154;
+        }
+
+        .issue-list li {
+            margin: 4px 0;
+        }
+
+        /* 打印样式优化 */
+        @media print {
+            body {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+            }
+
+            #controls {
+                display: none;
+            }
+
+            #report-container {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            #report-content {
+                padding: 16px;
+            }
+
+            select.result-select {
+                border: none !important;
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                -moz-appearance: none !important;
+                background-image: none !important;
+                background-color: transparent !important;
+                padding: 0 !important;
+                font-size: 14px;
+                color: #1d1d1f !important;
+            }
+
+            /* 隐藏所有下拉箭头 */
+            select.result-select::-ms-expand {
+                display: none;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            #report-content {
+                padding: 24px 20px;
+            }
+
+            .report-header h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            h3 {
+                font-size: 16px;
+            }
+
+            td.label, td.value {
+                display: block;
+                width: 100%;
+            }
+
+            td.label {
+                border-bottom: none;
+                padding-bottom: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="report-container">
+
+        <!-- 控制栏 -->
+        <div id="controls">
+            <div id="lang-switcher">
+                <button id="lang-zh">中文</button>
+                <button id="lang-en">English</button>
+                <button id="lang-es">Español</button>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button id="save-html" data-key="saveHtmlBtn">Save as HTML</button>
+                <button id="export-pdf" data-key="exportBtn">Export Current</button>
+                <button id="export-all-pdf" data-key="exportAllBtn">Export All Languages</button>
+            </div>
+        </div>
+
+        <!-- 报告内容 -->
+        <div id="report-content">
+
+            <!-- 报告头部 -->
+            <div class="report-header">
+                <h1 data-key="title">iPhone Inspection Report</h1>
+                <div class="subtitle" data-key="subtitle">Professional Device Diagnostics &amp; Assessment</div>
+            </div>
+
+            <!-- 一、设备基本信息 -->
+            <h2 data-key="sectionBasic">1. Basic Device Information</h2>
+            <table>
+                <tbody><tr>
+                    <td class="label" data-key="model">Device Model</td>
+                    <td class="value">
+                        <select class="result-select" id="deviceModel">
+                            <option value="iPhone 15 Pro Max" selected="selected">iPhone 15 Pro Max</option>
+                            <option value="iPhone 11">iPhone 11</option>
+                            <option value="iPhone 12">iPhone 12</option>
+                            <option value="iPhone 13">iPhone 13</option>
+                            <option value="iPhone 15">iPhone 15</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label" data-key="capacity">Capacity</td>
+                    <td class="value">
+                        <select class="result-select" id="deviceCapacity">
+                            <option value="64GB">64GB</option>
+                            <option value="128GB">128GB</option>
+                            <option value="256GB" selected="selected">256GB</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label" data-key="serialNumber">Serial Number</td>
+                    <td class="value">
+                        <input type="text" id="serialNumber" class="result-select" placeholder="请输入设备序列号" value="FPWLN62HFN" style="width: 100%; border: 1.5px solid #d2d2d7; padding: 8px 12px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label" data-key="imei">IMEI</td>
+                    <td class="value">
+                        <input type="text" id="imei" class="result-select" placeholder="请输入IMEI" value="359897656605496; 359897650609403" style="width: 100%; border: 1.5px solid #d2d2d7; padding: 8px 12px;">
+                    </td>
+                </tr>
+            </tbody></table>
+
+            <!-- 二、检测项目详情 -->
+            <h2 data-key="sectionDetails">2. Inspection Details</h2>
+
+            <!-- A. 屏幕与显示 -->
+            <h3 data-key="secA">A. Screen &amp; Display</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemScreenType">Screen Type</td>
+                        <td class="value">
+                            <select class="result-select" data-item="screenType">
+                                <option value="original" selected="selected">Original</option>
+                                <option value="thirdparty">Third-party</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="screenType">
+                                <option value="none">Perfect</option>
+                                <option value="minor" selected="selected">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemTrueTone">True Tone</td>
+                        <td class="value">
+                            <select class="result-select" data-item="trueTone">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="trueTone">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemTouch">Touch Function</td>
+                        <td class="value">
+                            <select class="result-select" data-item="touch">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="touch">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemScratches">Screen Scratches</td>
+                        <td class="value">
+                            <select class="result-select" data-item="scratches">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="light">Light</option>
+                                <option value="obvious">Obvious</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="scratches">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemDeadPixels">Dead/Bright Pixels</td>
+                        <td class="value">
+                            <select class="result-select" data-item="deadPixels">
+                                <option value="no" selected="selected">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="deadPixels">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemScreenPosition">Screen Position</td>
+                        <td class="value">
+                            <select class="result-select" data-item="screenPosition">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="shifted">Misaligned/Shifted</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="screenPosition">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- B. 外观结构 -->
+            <h3 data-key="secB">B. Body &amp; Structure</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemBody">Body Condition</td>
+                        <td class="value">
+                            <select class="result-select" data-item="body">
+                                <option value="good" selected="selected">Good</option>
+                                <option value="worn">Worn</option>
+                                <option value="scratched">Scratched</option>
+                                <option value="dented">Dented</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="body">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBackCover">Back Cover</td>
+                        <td class="value">
+                            <select class="result-select" data-item="backCover">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="bulged">Bulged</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="backCover">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemScrews">Bottom Screws</td>
+                        <td class="value">
+                            <select class="result-select" data-item="screws">
+                                <option value="original" selected="selected">Original</option>
+                                <option value="traces">Disassembly Traces</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="screws">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- C. 按键与触控 -->
+            <h3 data-key="secC">C. Buttons &amp; Haptics</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemPowerBtn">Power Button</td>
+                        <td class="value">
+                            <select class="result-select" data-item="powerBtn">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="powerBtn">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemVolumeBtn">Volume Buttons</td>
+                        <td class="value">
+                            <select class="result-select" data-item="volumeBtn">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="volumeBtn">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemMuteBtn">Mute Switch</td>
+                        <td class="value">
+                            <select class="result-select" data-item="muteBtn">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="muteBtn">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemVibration">Vibration Motor</td>
+                        <td class="value">
+                            <select class="result-select" data-item="vibration">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="vibration">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- D. 摄像头系统 -->
+            <h3 data-key="secD">D. Camera System</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemFrontCam">Front Camera Appearance</td>
+                        <td class="value">
+                            <select class="result-select" data-item="frontCam">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="frontCam">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemFrontCamBlurry">Front Camera Clarity</td>
+                        <td class="value">
+                            <select class="result-select" data-item="frontCamBlurry">
+                                <option value="clear" selected="selected">Clear</option>
+                                <option value="blurry">Blurry</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="frontCamBlurry">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemFrontCamWhiteBalance">Front Camera White Balance</td>
+                        <td class="value">
+                            <select class="result-select" data-item="frontCamWhiteBalance">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="frontCamWhiteBalance">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemFrontCamDust">Front Camera Dust</td>
+                        <td class="value">
+                            <select class="result-select" data-item="frontCamDust">
+                                <option value="clean" selected="selected">None</option>
+                                <option value="dusty">Has Dust</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="frontCamDust">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBackCam">Rear Camera Appearance</td>
+                        <td class="value">
+                            <select class="result-select" data-item="backCam">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="backCam">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBackCamBlurry">Rear Camera Clarity</td>
+                        <td class="value">
+                            <select class="result-select" data-item="backCamBlurry">
+                                <option value="clear" selected="selected">Clear</option>
+                                <option value="blurry">Blurry</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="backCamBlurry">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBackCamWhiteBalance">Rear Camera White Balance</td>
+                        <td class="value">
+                            <select class="result-select" data-item="backCamWhiteBalance">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="backCamWhiteBalance">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBackCamDust">Rear Camera Dust</td>
+                        <td class="value">
+                            <select class="result-select" data-item="backCamDust">
+                                <option value="clean" selected="selected">None</option>
+                                <option value="dusty">Has Dust</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="backCamDust">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBackCamWater">Rear Camera Water Damage</td>
+                        <td class="value">
+                            <select class="result-select" data-item="backCamWater">
+                                <option value="noWater" selected="selected">None</option>
+                                <option value="waterTrace">Water Damage</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="backCamWater">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemFlash">Flash</td>
+                        <td class="value">
+                            <select class="result-select" data-item="flash">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="flash">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- E. 音频系统 -->
+            <h3 data-key="secE">E. Audio System</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemEarpieceMesh">Earpiece Mesh Integrity</td>
+                        <td class="value">
+                            <select class="result-select" data-item="earpieceMesh">
+                                <option value="intact" selected="selected">Intact</option>
+                                <option value="incomplete">Incomplete</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="earpieceMesh">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemEarpiece">Earpiece</td>
+                        <td class="value">
+                            <select class="result-select" data-item="earpiece">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="earpiece">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemMicrophone">Microphone</td>
+                        <td class="value">
+                            <select class="result-select" data-item="microphone">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="microphone">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemSpeaker">Speaker</td>
+                        <td class="value">
+                            <select class="result-select" data-item="speaker">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="speaker">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- F. 传感器与定位 -->
+            <h3 data-key="secF">F. Sensors &amp; Location</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemFaceID">Face ID/Touch ID</td>
+                        <td class="value">
+                            <select class="result-select" data-item="faceID">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="faceID">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemProximity">Proximity Sensor</td>
+                        <td class="value">
+                            <select class="result-select" data-item="proximity">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="proximity">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemGPS">GPS</td>
+                        <td class="value">
+                            <select class="result-select" data-item="gps">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="gps">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- G. 无线连接 -->
+            <h3 data-key="secG">G. Connectivity</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemWifi">WiFi</td>
+                        <td class="value">
+                            <select class="result-select" data-item="wifi">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="wifi">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBluetooth">Bluetooth</td>
+                        <td class="value">
+                            <select class="result-select" data-item="bluetooth">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="bluetooth">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemCellular">Cellular</td>
+                        <td class="value">
+                            <select class="result-select" data-item="cellular">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="cellular">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- H. 电池与充电 -->
+            <h3 data-key="secH">H. Battery &amp; Charging</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemBatteryHealth">Battery Health</td>
+                        <td class="value">
+                            <select class="result-select" data-item="batteryHealth">
+                                <option value="perfect">~100%</option>
+                                <option value="excellent" selected="selected">Excellent(90-100%)</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair(70-79%)</option>
+                                <option value="poor">Poor(&lt;70%)</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="batteryHealth">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemBatteryType">Battery Type</td>
+                        <td class="value">
+                            <select class="result-select" data-item="batteryType">
+                                <option value="original" selected="selected">Original</option>
+                                <option value="thirdparty">Third-party</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="batteryType">
+                                <option value="none">Perfect</option>
+                                <option value="minor" selected="selected">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemCharging">Charging Function</td>
+                        <td class="value">
+                            <select class="result-select" data-item="charging">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="charging">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- I. 系统与安全 -->
+            <h3 data-key="secI">I. System &amp; Security</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemIDLock">ID Lock Status</td>
+                        <td class="value">
+                            <select class="result-select" data-item="idLock">
+                                <option value="unlocked" selected="selected">Unlocked</option>
+                                <option value="locked">Locked</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="idLock">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemSystem">System Operation</td>
+                        <td class="value">
+                            <select class="result-select" data-item="system">
+                                <option value="normal" selected="selected">Normal</option>
+                                <option value="abnormal">Abnormal</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="system">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- J. 拆机检测 -->
+            <h3 data-key="secJ">J. Internal Inspection</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="colItem">Test Item</th>
+                        <th data-key="colResult">Result</th>
+                        <th data-key="colSeverity">Severity Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label" data-key="itemDisassembly">Disassembly Traces</td>
+                        <td class="value">
+                            <select class="result-select" data-item="disassembly">
+                                <option value="no" selected="selected">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="disassembly">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="itemWaterDamage">Water Damage</td>
+                        <td class="value">
+                            <select class="result-select" data-item="waterDamage">
+                                <option value="no" selected="selected">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </td>
+                        <td class="value">
+                            <select class="result-select severity-select" data-for="waterDamage">
+                                <option value="none" selected="selected">Perfect</option>
+                                <option value="minor">Like New</option>
+                                <option value="major">Light Wear</option>
+                                <option value="critical">Note</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 三、问题汇总 -->
+            <h2 data-key="sectionSummary">3. Issues Summary</h2>
+            <div class="issue-summary" id="issueSummary">
+                <div class="issue-card minor">
+                    <div class="issue-card-title">⭐ Like New Condition</div>
+                    <ul class="issue-list">
+                        <li>Screen Type: Original</li><li>Battery Type: Original</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 四、综合评估 -->
+            <h2 data-key="sectionConclusion">4. Overall Assessment</h2>
+            <div class="conclusion-box">
+                <div class="conclusion-title">
+                    <span data-key="finalRecommendation">Final Recommendation</span>
+                </div>
+                <div id="finalRecommendationBadge"><div class="recommendation-badge recommendation-recommended">✅ Highly Recommended</div></div>
+                <table style="margin-top: 16px;">
+                    <tbody><tr>
+                        <td class="label" data-key="overallStatus">Device Status</td>
+                        <td class="value" id="overallStatusText">Device in excellent condition, nearly brand new, highly recommended!</td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="criticalIssues">Items to Note</td>
+                        <td class="value" id="criticalCount">0</td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="majorIssues">Usage Signs</td>
+                        <td class="value" id="majorCount">0</td>
+                    </tr>
+                    <tr>
+                        <td class="label" data-key="minorIssues">Like New Items</td>
+                        <td class="value" id="minorCount">2</td>
+                    </tr>
+                </tbody></table>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+// ================== JavaScript 核心功能 ==================
+(function() {
+
+    // 翻译数据库
+    const translations = {
+        'zh': {
+            'title': 'iPhone 验机报告',
+            'subtitle': '专业设备检测与评估',
+            'saveHtmlBtn': '保存为HTML',
+            'exportBtn': '导出当前语言',
+            'exportAllBtn': '导出全部语言',
+            'sectionBasic': '一、设备基本信息',
+            'model': '设备型号',
+            'capacity': '存储容量',
+            'serialNumber': '序列号',
+            'imei': 'IMEI',
+            'sectionDetails': '二、检测项目详情',
+            'colItem': '检测项目',
+            'colResult': '检测结果',
+            'colSeverity': '问题级别',
+            'secA': 'A. 屏幕与显示',
+            'itemScreenType': '屏幕类型',
+            'itemTrueTone': '原彩显示',
+            'itemTouch': '触摸功能',
+            'itemScratches': '屏幕划痕',
+            'itemDeadPixels': '亮点/坏点',
+            'itemScreenPosition': '屏幕位置',
+            'secB': 'B. 外观结构',
+            'itemBody': '机身外观',
+            'itemBodyColor': '机壳颜色',
+            'itemBackCover': '后盖状态',
+            'itemScrews': '底部螺丝',
+            'secC': 'C. 按键与触控',
+            'itemPowerBtn': '电源键',
+            'itemVolumeBtn': '音量键',
+            'itemMuteBtn': '静音键',
+            'itemVibration': '震动马达',
+            'secD': 'D. 摄像头系统',
+            'itemFrontCam': '前置摄像头外观',
+            'itemFrontCamBlurry': '前置摄像头清晰度',
+            'itemFrontCamWhiteBalance': '前置摄像头白平衡',
+            'itemFrontCamDust': '前摄像头灰尘',
+            'itemBackCam': '后置摄像头外观',
+            'itemBackCamBlurry': '后置摄像头清晰度',
+            'itemBackCamWhiteBalance': '后置摄像头白平衡',
+            'itemBackCamDust': '后摄像头灰尘',
+            'itemBackCamWater': '后摄像头进水痕迹',
+            'itemFlash': '闪光灯',
+            'secE': 'E. 音频系统',
+            'itemEarpieceMesh': '听筒网完整性',
+            'itemEarpiece': '听筒',
+            'itemMicrophone': '麦克风',
+            'itemSpeaker': '扬声器',
+            'secF': 'F. 传感器与定位',
+            'itemFaceID': 'Face ID/Touch ID',
+            'itemProximity': '距离感应',
+            'itemGPS': 'GPS定位',
+            'secG': 'G. 无线连接',
+            'itemWifi': 'WiFi连接',
+            'itemBluetooth': '蓝牙',
+            'itemCellular': '蜂窝网络',
+            'secH': 'H. 电池与充电',
+            'itemBatteryHealth': '电池健康度',
+            'itemBatteryType': '电池类型',
+            'itemCharging': '充电功能',
+            'secI': 'I. 系统与安全',
+            'itemIDLock': 'ID锁状态',
+            'itemSystem': '系统运行',
+            'secJ': 'J. 拆机检测',
+            'itemDisassembly': '拆机痕迹',
+            'itemWaterDamage': '进水检测',
+            'sectionSummary': '三、问题汇总',
+            'sectionConclusion': '四、综合评估',
+            'finalRecommendation': '最终建议',
+            'overallStatus': '设备状态',
+            'criticalIssues': '需关注项目',
+            'majorIssues': '使用痕迹',
+            'minorIssues': '99新项目',
+            'sigSign': '验机人签名',
+            'issueTitleCritical': '🔵 需要关注的项目',
+            'issueTitleMajor': '🟢 轻微使用痕迹',
+            'issueTitleMinor': '⭐ 99新级别',
+            'recommendationRecommended': '✅ 极力推荐',
+            'recommendationUsable': '👍 值得购买',
+            'recommendationNotRecommended': '💡 建议谨慎',
+            'options': {
+                // 通用
+                'normal': '正常',
+                'abnormal': '异常',
+                'none': '完美',
+                'yes': '有',
+                'no': '无',
+                // 屏幕类型
+                'original': '原装',
+                'thirdparty': '第三方',
+                // 划痕
+                'light': '轻微',
+                'obvious': '明显',
+                // 外观
+                'good': '完好',
+                'worn': '磨损',
+                'scratched': '划痕',
+                'dented': '凹陷',
+                'bulged': '鼓包',
+                'traces': '拆卸痕迹',
+                // 新增选项
+                'intact': '完整',
+                'incomplete': '不完整',
+                'clear': '清晰',
+                'blurry': '模糊',
+                'clean': '无',
+                'dusty': '有灰尘',
+                'noWater': '无',
+                'waterTrace': '有进水痕迹',
+                'replaced': '颜色不对(已更换外壳)',
+                'shifted': '位置偏高/偏移',
+                // 电池
+                'excellent': '优秀(90%+)',
+                'fair': '一般(70-79%)',
+                'poor': '较差(70%以下)',
+                // ID锁
+                'unlocked': '未锁定',
+                'locked': '已锁定',
+                // 问题级别
+                'minor': '99新',
+                'major': '轻微使用痕迹',
+                'critical': '需注意'
+            }
+        },
+        'en': {
+            'title': 'iPhone Inspection Report',
+            'subtitle': 'Professional Device Diagnostics & Assessment',
+            'saveHtmlBtn': 'Save as HTML',
+            'exportBtn': 'Export Current',
+            'exportAllBtn': 'Export All Languages',
+            'sectionBasic': '1. Basic Device Information',
+            'model': 'Device Model',
+            'capacity': 'Capacity',
+            'serialNumber': 'Serial Number',
+            'imei': 'IMEI',
+            'sectionDetails': '2. Inspection Details',
+            'colItem': 'Test Item',
+            'colResult': 'Result',
+            'colSeverity': 'Severity Level',
+            'secA': 'A. Screen & Display',
+            'itemScreenType': 'Screen Type',
+            'itemTrueTone': 'True Tone',
+            'itemTouch': 'Touch Function',
+            'itemScratches': 'Screen Scratches',
+            'itemDeadPixels': 'Dead/Bright Pixels',
+            'itemScreenPosition': 'Screen Position',
+            'secB': 'B. Body & Structure',
+            'itemBody': 'Body Condition',
+            'itemBodyColor': 'Body Color',
+            'itemBackCover': 'Back Cover',
+            'itemScrews': 'Bottom Screws',
+            'secC': 'C. Buttons & Haptics',
+            'itemPowerBtn': 'Power Button',
+            'itemVolumeBtn': 'Volume Buttons',
+            'itemMuteBtn': 'Mute Switch',
+            'itemVibration': 'Vibration Motor',
+            'secD': 'D. Camera System',
+            'itemFrontCam': 'Front Camera Appearance',
+            'itemFrontCamBlurry': 'Front Camera Clarity',
+            'itemFrontCamWhiteBalance': 'Front Camera White Balance',
+            'itemFrontCamDust': 'Front Camera Dust',
+            'itemBackCam': 'Rear Camera Appearance',
+            'itemBackCamBlurry': 'Rear Camera Clarity',
+            'itemBackCamWhiteBalance': 'Rear Camera White Balance',
+            'itemBackCamDust': 'Rear Camera Dust',
+            'itemBackCamWater': 'Rear Camera Water Damage',
+            'itemFlash': 'Flash',
+            'secE': 'E. Audio System',
+            'itemEarpieceMesh': 'Earpiece Mesh Integrity',
+            'itemEarpiece': 'Earpiece',
+            'itemMicrophone': 'Microphone',
+            'itemSpeaker': 'Speaker',
+            'secF': 'F. Sensors & Location',
+            'itemFaceID': 'Face ID/Touch ID',
+            'itemProximity': 'Proximity Sensor',
+            'itemGPS': 'GPS',
+            'secG': 'G. Connectivity',
+            'itemWifi': 'WiFi',
+            'itemBluetooth': 'Bluetooth',
+            'itemCellular': 'Cellular',
+            'secH': 'H. Battery & Charging',
+            'itemBatteryHealth': 'Battery Health',
+            'itemBatteryType': 'Battery Type',
+            'itemCharging': 'Charging Function',
+            'secI': 'I. System & Security',
+            'itemIDLock': 'ID Lock Status',
+            'itemSystem': 'System Operation',
+            'secJ': 'J. Internal Inspection',
+            'itemDisassembly': 'Disassembly Traces',
+            'itemWaterDamage': 'Water Damage',
+            'sectionSummary': '3. Issues Summary',
+            'sectionConclusion': '4. Overall Assessment',
+            'finalRecommendation': 'Final Recommendation',
+            'overallStatus': 'Device Status',
+            'criticalIssues': 'Items to Note',
+            'majorIssues': 'Usage Signs',
+            'minorIssues': 'Like New Items',
+            'sigDate': 'Inspection Date',
+            'sigSign': 'Inspector Signature',
+            'issueTitleCritical': '🔵 Items to Note',
+            'issueTitleMajor': '🟢 Light Usage Signs',
+            'issueTitleMinor': '⭐ Like New Condition',
+            'recommendationRecommended': '✅ Highly Recommended',
+            'recommendationUsable': '👍 Worth Buying',
+            'recommendationNotRecommended': '💡 Consider Carefully',
+            'options': {
+                'normal': 'Normal',
+                'abnormal': 'Abnormal',
+                'none': 'Perfect',
+                'yes': 'Yes',
+                'no': 'No',
+                'original': 'Original',
+                'thirdparty': 'Third-party',
+                'light': 'Light',
+                'obvious': 'Obvious',
+                'good': 'Good',
+                'worn': 'Worn',
+                'scratched': 'Scratched',
+                'dented': 'Dented',
+                'bulged': 'Bulged',
+                'traces': 'Disassembly Traces',
+                // New options
+                'intact': 'Intact',
+                'incomplete': 'Incomplete',
+                'clear': 'Clear',
+                'blurry': 'Blurry',
+                'clean': 'None',
+                'dusty': 'Has Dust',
+                'noWater': 'None',
+                'waterTrace': 'Water Damage',
+                'replaced': 'Wrong Color (Replaced)',
+                'shifted': 'Misaligned/Shifted',
+                'excellent': 'Excellent(90%+)',
+                'fair': 'Fair(70-79%)',
+                'poor': 'Poor(<70%)',
+                'unlocked': 'Unlocked',
+                'locked': 'Locked',
+                'minor': 'Like New',
+                'major': 'Light Wear',
+                'critical': 'Note'
+            }
+        },
+        'es': {
+            'title': 'Informe de Inspección de iPhone',
+            'subtitle': 'Diagnóstico y Evaluación Profesional',
+            'saveHtmlBtn': 'Guardar como HTML',
+            'exportBtn': 'Exportar Actual',
+            'exportAllBtn': 'Exportar Todos los Idiomas',
+            'sectionBasic': '1. Información Básica',
+            'model': 'Modelo',
+            'capacity': 'Capacidad',
+            'serialNumber': 'Número de Serie',
+            'imei': 'IMEI',
+            'sectionDetails': '2. Detalles de Inspección',
+            'colItem': 'Elemento',
+            'colResult': 'Resultado',
+            'colSeverity': 'Nivel de Gravedad',
+            'secA': 'A. Pantalla y Visualización',
+            'itemScreenType': 'Tipo de Pantalla',
+            'itemTrueTone': 'True Tone',
+            'itemTouch': 'Función Táctil',
+            'itemScratches': 'Rayones',
+            'itemDeadPixels': 'Píxeles Muertos',
+            'itemScreenPosition': 'Posición de Pantalla',
+            'secB': 'B. Cuerpo y Estructura',
+            'itemBody': 'Condición Física',
+            'itemBodyColor': 'Color del Cuerpo',
+            'itemBackCover': 'Tapa Trasera',
+            'itemScrews': 'Tornillos Inferiores',
+            'secC': 'C. Botones y Táctil',
+            'itemPowerBtn': 'Botón de Encendido',
+            'itemVolumeBtn': 'Botones de Volumen',
+            'itemMuteBtn': 'Botón de Silencio',
+            'itemVibration': 'Motor de Vibración',
+            'secD': 'D. Sistema de Cámaras',
+            'itemFrontCam': 'Apariencia Cámara Frontal',
+            'itemFrontCamBlurry': 'Claridad Cámara Frontal',
+            'itemFrontCamWhiteBalance': 'Balance de Blancos Cámara Frontal',
+            'itemFrontCamDust': 'Polvo Cámara Frontal',
+            'itemBackCam': 'Apariencia Cámara Trasera',
+            'itemBackCamBlurry': 'Claridad Cámara Trasera',
+            'itemBackCamWhiteBalance': 'Balance de Blancos Cámara Trasera',
+            'itemBackCamDust': 'Polvo Cámara Trasera',
+            'itemBackCamWater': 'Daño por Agua Cámara Trasera',
+            'itemFlash': 'Flash',
+            'secE': 'E. Sistema de Audio',
+            'itemEarpieceMesh': 'Integridad Malla Auricular',
+            'itemEarpiece': 'Auricular',
+            'itemMicrophone': 'Micrófono',
+            'itemSpeaker': 'Altavoz',
+            'secF': 'F. Sensores y Localización',
+            'itemFaceID': 'Face ID/Touch ID',
+            'itemProximity': 'Sensor de Proximidad',
+            'itemGPS': 'GPS',
+            'secG': 'G. Conectividad',
+            'itemWifi': 'WiFi',
+            'itemBluetooth': 'Bluetooth',
+            'itemCellular': 'Red Celular',
+            'secH': 'H. Batería y Carga',
+            'itemBatteryHealth': 'Salud de Batería',
+            'itemBatteryType': 'Tipo de Batería',
+            'itemCharging': 'Función de Carga',
+            'secI': 'I. Sistema y Seguridad',
+            'itemIDLock': 'Estado de Bloqueo ID',
+            'itemSystem': 'Operación del Sistema',
+            'secJ': 'J. Inspección Interna',
+            'itemDisassembly': 'Trazas de Desmontaje',
+            'itemWaterDamage': 'Daño por Agua',
+            'sectionSummary': '3. Resumen de Problemas',
+            'sectionConclusion': '4. Evaluación General',
+            'finalRecommendation': 'Recomendación Final',
+            'overallStatus': 'Estado del Dispositivo',
+            'criticalIssues': 'Puntos a Notar',
+            'majorIssues': 'Señales de Uso',
+            'minorIssues': 'Artículos Como Nuevos',
+            'sigDate': 'Fecha de Inspección',
+            'sigSign': 'Firma del Inspector',
+            'issueTitleCritical': '🔵 Puntos a Notar',
+            'issueTitleMajor': '🟢 Señales de Uso Ligero',
+            'issueTitleMinor': '⭐ Como Nuevo',
+            'recommendationRecommended': '✅ Altamente Recomendado',
+            'recommendationUsable': '👍 Vale la Pena',
+            'recommendationNotRecommended': '💡 Considerar Cuidadosamente',
+            'options': {
+                'normal': 'Normal',
+                'abnormal': 'Anormal',
+                'none': 'Perfecto',
+                'yes': 'Sí',
+                'no': 'No',
+                'original': 'Original',
+                'thirdparty': 'De Terceros',
+                'light': 'Leves',
+                'obvious': 'Obvios',
+                'good': 'Bueno',
+                'worn': 'Desgastado',
+                'scratched': 'Rayado',
+                'dented': 'Abollado',
+                'bulged': 'Hinchado',
+                'traces': 'Trazas de Desmontaje',
+                // Nuevas opciones
+                'intact': 'Intacto',
+                'incomplete': 'Incompleto',
+                'clear': 'Claro',
+                'blurry': 'Borroso',
+                'clean': 'Ninguno',
+                'dusty': 'Tiene Polvo',
+                'noWater': 'Ninguno',
+                'waterTrace': 'Daño por Agua',
+                'replaced': 'Color Incorrecto (Reemplazado)',
+                'shifted': 'Desalineado/Desplazado',
+                'excellent': 'Excelente(90%+)',
+                'fair': 'Regular(70-79%)',
+                'poor': 'Pobre(<70%)',
+                'unlocked': 'Desbloqueado',
+                'locked': 'Bloqueado',
+                'minor': 'Como Nuevo',
+                'major': 'Uso Ligero',
+                'critical': 'Nota'
+            }
+        }
+    };
+
+    let currentLang = 'zh';
+
+    // 语言切换功能
+    function changeLanguage(lang) {
+        if (!translations[lang]) return;
+        currentLang = lang;
+        const langData = translations[lang];
+
+        // 更改文档标题
+        document.title = langData.title;
+
+        // 翻译所有带 data-key 的元素
+        document.querySelectorAll('[data-key]').forEach(el => {
+            const key = el.dataset.key;
+            if (langData[key]) {
+                el.textContent = langData[key];
+            }
+        });
+
+        // 翻译所有下拉选项
+        const optionTranslations = langData.options;
+        document.querySelectorAll('select.result-select').forEach(select => {
+            const currentValue = select.value;
+            select.querySelectorAll('option').forEach(option => {
+                const key = option.value;
+                if (optionTranslations[key]) {
+                    option.textContent = optionTranslations[key];
+                }
+            });
+            select.value = currentValue;
+        });
+
+        // 重新生成问题汇总（使用新语言）
+        updateIssueSummary();
+    }
+
+    // 更新问题汇总
+    function updateIssueSummary() {
+        const summaryContainer = document.getElementById('issueSummary');
+        const langData = translations[currentLang];
+
+        // 收集所有问题
+        const issues = {
+            critical: [],
+            major: [],
+            minor: []
+        };
+
+        // 遍历所有问题级别选择器
+        document.querySelectorAll('select.severity-select').forEach(select => {
+            const severity = select.value;
+            if (severity !== 'none') {
+                const itemName = select.dataset.for;
+                const itemSelect = document.querySelector(`select[data-item="${itemName}"]`);
+                const itemLabel = itemSelect.closest('tr').querySelector('td.label').textContent;
+                const itemResult = itemSelect.options[itemSelect.selectedIndex].text;
+
+                issues[severity].push(`${itemLabel}: ${itemResult}`);
+            }
+        });
+
+        // 生成问题卡片
+        let html = '';
+
+        if (issues.critical.length > 0) {
+            html += `
+                <div class="issue-card critical">
+                    <div class="issue-card-title">${langData.issueTitleCritical}</div>
+                    <ul class="issue-list">
+                        ${issues.critical.map(issue => `<li>${issue}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        if (issues.major.length > 0) {
+            html += `
+                <div class="issue-card major">
+                    <div class="issue-card-title">${langData.issueTitleMajor}</div>
+                    <ul class="issue-list">
+                        ${issues.major.map(issue => `<li>${issue}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        if (issues.minor.length > 0) {
+            html += `
+                <div class="issue-card minor">
+                    <div class="issue-card-title">${langData.issueTitleMinor}</div>
+                    <ul class="issue-list">
+                        ${issues.minor.map(issue => `<li>${issue}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        if (html === '') {
+            html = `<div class="issue-card" style="border-color: #4caf50; background-color: #f1f8f4;">
+                <div class="issue-card-title" style="color: #2e7d32;">✨ ${currentLang === 'zh' ? '设备成色完美,无任何瑕疵!' : currentLang === 'en' ? 'Device in perfect condition, no flaws!' : '¡Dispositivo en perfectas condiciones, sin defectos!'}</div>
+            </div>`;
+        }
+
+        summaryContainer.innerHTML = html;
+
+        // 更新综合评估
+        updateFinalRecommendation(issues);
+    }
+
+    // 更新综合评估
+    function updateFinalRecommendation(issues) {
+        const langData = translations[currentLang];
+        const badgeContainer = document.getElementById('finalRecommendationBadge');
+        const statusText = document.getElementById('overallStatusText');
+
+        document.getElementById('criticalCount').textContent = issues.critical.length;
+        document.getElementById('majorCount').textContent = issues.major.length;
+        document.getElementById('minorCount').textContent = issues.minor.length;
+
+        let recommendation = '';
+        let status = '';
+        let badgeClass = '';
+
+        // 评估逻辑 - 淡化问题,强调优点
+        if (issues.critical.length > 2) {
+            recommendation = langData.recommendationNotRecommended;
+            badgeClass = 'recommendation-not-recommended';
+            status = currentLang === 'zh' ? '设备有几处需要关注的地方,建议详细了解后再决定' :
+                     currentLang === 'en' ? 'Device has some items to note, recommend reviewing details before purchase' :
+                     'El dispositivo tiene algunos puntos a notar, revise los detalles antes de comprar';
+        } else if (issues.major.length >= 5) {
+            recommendation = langData.recommendationUsable;
+            badgeClass = 'recommendation-usable';
+            status = currentLang === 'zh' ? '设备有一些使用痕迹,但整体成色不错,值得考虑' :
+                     currentLang === 'en' ? 'Device shows some usage signs but overall good condition, worth considering' :
+                     'El dispositivo muestra algunos signos de uso pero en general buen estado, vale la pena considerar';
+        } else if (issues.major.length > 0 || issues.critical.length > 0) {
+            recommendation = langData.recommendationUsable;
+            badgeClass = 'recommendation-usable';
+            status = currentLang === 'zh' ? '设备成色良好,有轻微使用痕迹,性价比高' :
+                     currentLang === 'en' ? 'Device in good condition with light usage signs, great value' :
+                     'Dispositivo en buenas condiciones con ligeros signos de uso, excelente relación calidad-precio';
+        } else if (issues.minor.length > 15) {
+            recommendation = langData.recommendationUsable;
+            badgeClass = 'recommendation-usable';
+            status = currentLang === 'zh' ? '设备接近99新,仅有极少瑕疵,品质优秀' :
+                     currentLang === 'en' ? 'Device nearly like new with minimal imperfections, excellent quality' :
+                     'Dispositivo casi como nuevo con imperfecciones mínimas, excelente calidad';
+        } else {
+            recommendation = langData.recommendationRecommended;
+            badgeClass = 'recommendation-recommended';
+            status = currentLang === 'zh' ? '设备成色极佳,接近全新,极力推荐!' :
+                     currentLang === 'en' ? 'Device in excellent condition, nearly brand new, highly recommended!' :
+                     '¡Dispositivo en excelentes condiciones, casi nuevo, altamente recomendado!';
+        }
+
+        badgeContainer.innerHTML = `<div class="recommendation-badge ${badgeClass}">${recommendation}</div>`;
+        statusText.textContent = status;
+    }
+
+    // 生成文件名
+    function generateFilename(lang, deviceNumber = '') {
+        // 获取设备型号
+        const modelSelect = document.getElementById('deviceModel');
+        const model = modelSelect.value.replace(/\s+/g, '');  // 移除空格
+
+        // 获取存储容量
+        const capacitySelect = document.getElementById('deviceCapacity');
+        const capacity = capacitySelect.value;
+
+        // 获取序列号
+        const serialInput = document.getElementById('serialNumber');
+        const serial = serialInput.value.trim();
+
+        // 获取IMEI
+        const imeiInput = document.getElementById('imei');
+        const imei = imeiInput.value.trim();
+
+        // 语言标识
+        const langMap = {
+            'zh': 'CN',
+            'en': 'EN',
+            'es': 'ES'
+        };
+        const langCode = langMap[lang] || 'CN';
+
+        // 组合编号、序列号和IMEI
+        let identifier = '';
+        if (deviceNumber && serial && imei) {
+            // 完整信息: 编号_序列号_IMEI
+            identifier = `${deviceNumber}_${serial}_${imei}`;
+        } else if (deviceNumber && serial) {
+            // 有编号和序列号
+            identifier = `${deviceNumber}_${serial}`;
+        } else if (deviceNumber && imei) {
+            // 有编号和IMEI
+            identifier = `${deviceNumber}_${imei}`;
+        } else if (serial && imei) {
+            // 有序列号和IMEI
+            identifier = `${serial}_${imei}`;
+        } else if (deviceNumber) {
+            // 只有编号
+            identifier = deviceNumber;
+        } else if (serial) {
+            // 只有序列号
+            identifier = serial;
+        } else if (imei) {
+            // 只有IMEI
+            identifier = imei;
+        } else {
+            // 如果都没有,使用时间戳
+            const now = new Date();
+            identifier = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}${String(now.getSeconds()).padStart(2,'0')}`;
+        }
+
+        // 格式: iPhone11_64GB_编号_序列号_IMEI_CN.pdf
+        return `${model}_${capacity}_${identifier}_${langCode}.pdf`;
+    }
+
+    // PDF 导出功能
+    function exportPDF(targetLang = null) {
+        const element = document.getElementById('report-content');
+        const lang = targetLang || currentLang;
+        const filename = generateFilename(lang);
+
+        // 移除焦点
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+            document.activeElement.blur();
+        }
+
+        // 临时替换所有select为span显示选中的文本
+        const selects = element.querySelectorAll('select.result-select, input[type="text"], input[type="date"]');
+        const originalElements = [];
+
+        selects.forEach((select) => {
+            // 保存原始元素
+            const originalData = {
+                element: select,
+                parent: select.parentNode,
+                nextSibling: select.nextSibling
+            };
+            originalElements.push(originalData);
+
+            // 创建替代的span元素
+            const span = document.createElement('span');
+
+            if (select.tagName === 'SELECT') {
+                span.textContent = select.options[select.selectedIndex].text;
+            } else {
+                span.textContent = select.value || select.placeholder;
+            }
+
+            span.style.cssText = 'display: inline-block; padding: 6px 10px; font-size: 13px; color: #1d1d1f; width: 100%;';
+            span.className = 'pdf-replacement';
+
+            // 替换为span
+            select.parentNode.replaceChild(span, select);
+        });
+
+        const opt = {
+            margin: [0.3, 0.3, 0.3, 0.3],
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                letterRendering: true,
+                logging: false
+            },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        // 生成PDF
+        html2pdf().from(element).set(opt).save().then(() => {
+            // PDF生成完成后,恢复所有原始元素
+            const replacements = element.querySelectorAll('.pdf-replacement');
+
+            replacements.forEach((span, index) => {
+                if (originalElements[index]) {
+                    const original = originalElements[index];
+                    span.parentNode.replaceChild(original.element, span);
+                }
+            });
+        });
+    }
+
+    // 导出所有语言版本
+    async function exportAllPDF() {
+        const originalLang = currentLang;
+        const languages = ['zh', 'en', 'es'];
+
+        // 提示用户
+        const exportBtn = document.getElementById('export-all-pdf');
+        const originalText = exportBtn.textContent;
+        exportBtn.disabled = true;
+        exportBtn.textContent = '正在导出...';
+
+        for (let i = 0; i < languages.length; i++) {
+            const lang = languages[i];
+
+            // 更新按钮文本显示进度
+            exportBtn.textContent = `导出中 ${i + 1}/${languages.length}...`;
+
+            // 切换到目标语言
+            changeLanguage(lang);
+
+            // 等待一小段时间确保DOM更新
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // 导出当前语言的PDF
+            await new Promise((resolve) => {
+                const element = document.getElementById('report-content');
+                const filename = generateFilename(lang);
+
+                // 移除焦点
+                if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                    document.activeElement.blur();
+                }
+
+                // 临时替换所有select为span显示选中的文本
+                const selects = element.querySelectorAll('select.result-select, input[type="text"], input[type="date"]');
+                const originalElements = [];
+
+                selects.forEach((select) => {
+                    const originalData = {
+                        element: select,
+                        parent: select.parentNode,
+                        nextSibling: select.nextSibling
+                    };
+                    originalElements.push(originalData);
+
+                    const span = document.createElement('span');
+                    if (select.tagName === 'SELECT') {
+                        span.textContent = select.options[select.selectedIndex].text;
+                    } else {
+                        span.textContent = select.value || select.placeholder;
+                    }
+
+                    span.style.cssText = 'display: inline-block; padding: 6px 10px; font-size: 13px; color: #1d1d1f; width: 100%;';
+                    span.className = 'pdf-replacement';
+                    select.parentNode.replaceChild(span, select);
+                });
+
+                const opt = {
+                    margin: [0.3, 0.3, 0.3, 0.3],
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        letterRendering: true,
+                        logging: false
+                    },
+                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+                };
+
+                html2pdf().from(element).set(opt).save().then(() => {
+                    // 恢复所有原始元素
+                    const replacements = element.querySelectorAll('.pdf-replacement');
+                    replacements.forEach((span, index) => {
+                        if (originalElements[index]) {
+                            const original = originalElements[index];
+                            span.parentNode.replaceChild(original.element, span);
+                        }
+                    });
+
+                    // 等待一小段时间再继续下一个
+                    setTimeout(resolve, 1000);
+                });
+            });
+        }
+
+        // 恢复到原始语言
+        changeLanguage(originalLang);
+
+        // 恢复按钮状态
+        exportBtn.disabled = false;
+        exportBtn.textContent = originalText;
+
+        // 显示完成提示
+        alert(currentLang === 'zh' ? '已成功导出3个语言版本!' :
+              currentLang === 'en' ? 'Successfully exported 3 language versions!' :
+              '¡Se exportaron con éxito 3 versiones de idiomas!');
+    }
+
+    // localStorage 自动保存和加载功能
+    const STORAGE_KEY = 'iphone_inspection_report_data';
+
+    // 保存所有表单数据到 localStorage
+    function saveToLocalStorage() {
+        const formData = {};
+
+        // 保存所有 select 和 input 的值
+        document.querySelectorAll('select.result-select, input[type="text"]').forEach(element => {
+            if (element.id) {
+                if (element.tagName === 'SELECT') {
+                    formData[element.id] = element.value;
+                } else {
+                    formData[element.id] = element.value;
+                }
+            }
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+        console.log('数据已自动保存到 localStorage');
+    }
+
+    // 从 localStorage 加载数据
+    function loadFromLocalStorage() {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData) {
+            try {
+                const formData = JSON.parse(savedData);
+
+                // 恢复所有保存的值
+                Object.keys(formData).forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.value = formData[id];
+                    }
+                });
+
+                console.log('已从 localStorage 恢复数据');
+                return true;
+            } catch (e) {
+                console.error('加载保存的数据失败:', e);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    // 保存为 HTML 文件
+    function saveAsHTML() {
+        // 先保存当前数据到 localStorage
+        saveToLocalStorage();
+
+        // 更新所有 select 元素的 selected 属性，确保当前选中的值被保存到 HTML 中
+        document.querySelectorAll('select.result-select').forEach(select => {
+            // 移除所有 option 的 selected 属性
+            Array.from(select.options).forEach(option => {
+                option.removeAttribute('selected');
+            });
+            // 给当前选中的 option 添加 selected 属性
+            if (select.selectedIndex >= 0) {
+                select.options[select.selectedIndex].setAttribute('selected', 'selected');
+            }
+        });
+
+        // 更新所有 input 元素的 value 属性
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.setAttribute('value', input.value);
+        });
+
+        // 生成文件名（类似 PDF 的命名格式）
+        const modelSelect = document.getElementById('deviceModel');
+        const model = modelSelect.value.replace(/\s+/g, '');
+
+        const capacitySelect = document.getElementById('deviceCapacity');
+        const capacity = capacitySelect.value;
+
+        const serialInput = document.getElementById('serialNumber');
+        const serial = serialInput.value.trim();
+
+        const imeiInput = document.getElementById('imei');
+        const imei = imeiInput.value.trim();
+
+        let identifier = '';
+        if (serial && imei) {
+            identifier = `${serial}_${imei}`;
+        } else if (serial) {
+            identifier = serial;
+        } else if (imei) {
+            identifier = imei;
+        } else {
+            const now = new Date();
+            identifier = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}${String(now.getSeconds()).padStart(2,'0')}`;
+        }
+
+        const filename = `${model}_${capacity}_${identifier}.html`;
+
+        // 获取完整的 HTML 内容
+        const htmlContent = document.documentElement.outerHTML;
+
+        // 创建 Blob 并下载
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+
+        // 清理
+        URL.revokeObjectURL(link.href);
+
+        // 提示用户
+        const message = currentLang === 'zh' ? `已保存为 ${filename}` :
+                       currentLang === 'en' ? `Saved as ${filename}` :
+                       `Guardado como ${filename}`;
+        alert(message);
+    }
+
+    // 绑定事件
+    document.getElementById('lang-zh').addEventListener('click', () => changeLanguage('zh'));
+    document.getElementById('lang-en').addEventListener('click', () => changeLanguage('en'));
+    document.getElementById('lang-es').addEventListener('click', () => changeLanguage('es'));
+    document.getElementById('save-html').addEventListener('click', saveAsHTML);
+    document.getElementById('export-pdf').addEventListener('click', exportPDF);
+    document.getElementById('export-all-pdf').addEventListener('click', exportAllPDF);
+
+    // 监听所有下拉框和输入框变化，自动保存到 localStorage
+    document.querySelectorAll('select.result-select, input[type="text"]').forEach(element => {
+        element.addEventListener('change', () => {
+            saveToLocalStorage();
+            updateIssueSummary();
+        });
+
+        // 对于 input，也监听输入事件（延迟保存以提高性能）
+        if (element.tagName === 'INPUT') {
+            let saveTimeout;
+            element.addEventListener('input', () => {
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(() => {
+                    saveToLocalStorage();
+                }, 500); // 输入停止 500ms 后保存
+            });
+        }
+    });
+
+    // 初始化 - 默认使用西班牙语
+    changeLanguage('es');
+
+    // 尝试从 localStorage 加载数据
+    const dataLoaded = loadFromLocalStorage();
+
+    // 更新问题汇总
+    updateIssueSummary();
+
+    // 如果加载了数据，提示用户
+    if (dataLoaded) {
+        console.log('已自动恢复上次保存的数据');
+    }
+
+})();
+</script>
+
+
+
+</body></html>
