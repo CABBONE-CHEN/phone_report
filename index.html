@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Inspection Report - Query System</title>
+    <style>
+        /* 基础样式 - 与验机报告模板保持一致 */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.4;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            margin: 0;
+            padding: 15px;
+            letter-spacing: -0.01em;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 主容器 */
+        .query-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #d2d2d7;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* 头部样式 - 深蓝专业配色 */
+        .header {
+            padding: 32px 24px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.8px;
+        }
+
+        .header .subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+        }
+
+        /* 语言切换 */
+        .lang-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .lang-btn {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        /* 内容区域 */
+        .content {
+            padding: 32px;
+        }
+
+        /* 查询框样式 */
+        .query-section {
+            margin-bottom: 24px;
+        }
+
+        .query-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #515154;
+            margin-bottom: 8px;
+            letter-spacing: 0.2px;
+        }
+
+        .query-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #1d1d1f;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .query-input:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .query-input::placeholder {
+            color: #86868b;
+        }
+
+        /* 查询按钮 */
+        .query-btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+        }
+
+        .query-btn:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+
+        .query-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 结果提示 */
+        .result-message {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .result-message.error {
+            background-color: #fff5f5;
+            border: 1px solid #ff6b6b;
+            color: #cc0000;
+            display: block;
+        }
+
+        .result-message.success {
+            background-color: #f0fff4;
+            border: 1px solid #38a169;
+            color: #276749;
+            display: block;
+        }
+
+        .result-message.loading {
+            background-color: #f0f9ff;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+            display: block;
+        }
+
+        /* 设备列表 */
+        .device-list {
+            margin-top: 24px;
+        }
+
+        .device-list-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f5f5f7;
+        }
+
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e5e5e7;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .device-item:hover {
+            background-color: #f0f4ff;
+            border-color: #1e3a8a;
+        }
+
+        .device-info {
+            flex: 1;
+        }
+
+        .device-model {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .device-details {
+            font-size: 13px;
+            color: #86868b;
+            margin-top: 4px;
+        }
+
+        .device-arrow {
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* 页脚 */
+        .footer {
+            padding: 16px 32px;
+            background-color: #fafafa;
+            border-top: 1px solid #e5e5e7;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        /* 加载动画 */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .content {
+                padding: 24px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="query-container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1 data-key="title">iPhone Inspection Report</h1>
+            <div class="subtitle" data-key="subtitle">Professional Device Diagnostics & Assessment</div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="zh">中文</button>
+                <button class="lang-btn" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="es">Español</button>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content">
+            <div class="query-section">
+                <label class="query-label" data-key="inputLabel">Enter Serial Number or IMEI</label>
+                <input type="text"
+                       class="query-input"
+                       id="serialInput"
+                       data-placeholder-key="inputPlaceholder"
+                       placeholder="Serial Number / IMEI"
+                       autocomplete="off"
+                       spellcheck="false">
+                <button class="query-btn" id="queryBtn" data-key="queryBtn">
+                    <span class="btn-text">Search Report</span>
+                </button>
+                <div class="result-message" id="resultMessage"></div>
+            </div>
+
+            <!-- 搜索结果列表 -->
+            <div class="device-list" id="deviceList" style="display: none;">
+                <div class="device-list-title" data-key="searchResults">Search Results</div>
+                <div id="deviceListContent"></div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            <div class="footer-text" data-key="footer">Powered by Professional Device Inspection System</div>
+        </div>
+    </div>
+
+    <script>
+        // 多语言翻译配置
+        const translations = {
+            zh: {
+                title: 'iPhone 验机报告查询',
+                subtitle: '专业设备检测与评估系统',
+                inputLabel: '请输入序列号或 IMEI',
+                inputPlaceholder: '序列号 / IMEI',
+                queryBtn: '查询报告',
+                searchResults: '查询结果',
+                footer: '专业设备验机系统',
+                notFound: '未找到该设备的验机报告，请检查输入是否正确',
+                loading: '正在查询...',
+                found: '找到匹配的报告，正在跳转...',
+                multipleFound: '找到 {count} 个匹配结果',
+                enterSerial: '请输入序列号或 IMEI',
+                indexError: '无法加载设备索引，请稍后重试',
+                storage: '容量',
+                color: '颜色',
+                serial: '序列号'
+            },
+            en: {
+                title: 'iPhone Inspection Report',
+                subtitle: 'Professional Device Diagnostics & Assessment',
+                inputLabel: 'Enter Serial Number or IMEI',
+                inputPlaceholder: 'Serial Number / IMEI',
+                queryBtn: 'Search Report',
+                searchResults: 'Search Results',
+                footer: 'Powered by Professional Device Inspection System',
+                notFound: 'No inspection report found for this device. Please check your input.',
+                loading: 'Searching...',
+                found: 'Report found, redirecting...',
+                multipleFound: 'Found {count} matching results',
+                enterSerial: 'Please enter serial number or IMEI',
+                indexError: 'Unable to load device index. Please try again later.',
+                storage: 'Storage',
+                color: 'Color',
+                serial: 'Serial'
+            },
+            es: {
+                title: 'Informe de Inspección iPhone',
+                subtitle: 'Diagnóstico Profesional de Dispositivos',
+                inputLabel: 'Ingrese Número de Serie o IMEI',
+                inputPlaceholder: 'Número de Serie / IMEI',
+                queryBtn: 'Buscar Informe',
+                searchResults: 'Resultados de Búsqueda',
+                footer: 'Sistema Profesional de Inspección de Dispositivos',
+                notFound: 'No se encontró informe para este dispositivo. Verifique su entrada.',
+                loading: 'Buscando...',
+                found: 'Informe encontrado, redirigiendo...',
+                multipleFound: 'Se encontraron {count} resultados',
+                enterSerial: 'Por favor ingrese número de serie o IMEI',
+                indexError: 'No se puede cargar el índice. Intente más tarde.',
+                storage: 'Capacidad',
+                color: 'Color',
+                serial: 'Serie'
+            }
+        };
+
+        // 颜色翻译
+        const colorTranslations = {
+            '白色': { en: 'White', es: 'Blanco' },
+            '黑色': { en: 'Black', es: 'Negro' },
+            '紫色': { en: 'Purple', es: 'Púrpura' },
+            '粉色': { en: 'Pink', es: 'Rosa' },
+            '蓝色': { en: 'Blue', es: 'Azul' },
+            '绿色': { en: 'Green', es: 'Verde' },
+            '红色': { en: 'Red', es: 'Rojo' },
+            '黄色': { en: 'Yellow', es: 'Amarillo' },
+            '金色': { en: 'Gold', es: 'Oro' },
+            '银色': { en: 'Silver', es: 'Plata' }
+        };
+
+        let currentLang = 'zh';
+        let deviceIndex = null;
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载设备索引
+            loadDeviceIndex();
+
+            // 绑定语言切换
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchLanguage(this.dataset.lang);
+                });
+            });
+
+            // 绑定查询按钮
+            document.getElementById('queryBtn').addEventListener('click', performQuery);
+
+            // 绑定回车键查询
+            document.getElementById('serialInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performQuery();
+                }
+            });
+
+            // 初始化语言
+            switchLanguage('zh');
+        });
+
+        // 加载设备索引文件
+        async function loadDeviceIndex() {
+            try {
+                const response = await fetch('device_index.json');
+                if (response.ok) {
+                    deviceIndex = await response.json();
+                    console.log('Device index loaded:', Object.keys(deviceIndex.devices).length, 'devices');
+                } else {
+                    console.error('Failed to load device index');
+                }
+            } catch (error) {
+                console.error('Error loading device index:', error);
+            }
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            currentLang = lang;
+
+            // 更新按钮状态
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            // 更新所有文本
+            const t = translations[lang];
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+
+            // 更新占位符
+            document.querySelectorAll('[data-placeholder-key]').forEach(el => {
+                const key = el.dataset.placeholderKey;
+                if (t[key]) {
+                    el.placeholder = t[key];
+                }
+            });
+        }
+
+        // 获取翻译
+        function t(key, replacements = {}) {
+            let text = translations[currentLang][key] || translations['en'][key] || key;
+            for (const [k, v] of Object.entries(replacements)) {
+                text = text.replace(`{${k}}`, v);
+            }
+            return text;
+        }
+
+        // 获取颜色翻译
+        function translateColor(colorZh, lang) {
+            if (lang === 'zh') return colorZh;
+            const translation = colorTranslations[colorZh];
+            return translation ? translation[lang] : colorZh;
+        }
+
+        // 执行查询
+        function performQuery() {
+            const input = document.getElementById('serialInput').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('resultMessage');
+            const deviceListDiv = document.getElementById('deviceList');
+            const deviceListContent = document.getElementById('deviceListContent');
+
+            // 清空之前的结果
+            resultDiv.className = 'result-message';
+            resultDiv.style.display = 'none';
+            deviceListDiv.style.display = 'none';
+            deviceListContent.innerHTML = '';
+
+            // 验证输入
+            if (!input) {
+                showMessage('error', t('enterSerial'));
+                return;
+            }
+
+            // 检查索引是否加载
+            if (!deviceIndex) {
+                showMessage('error', t('indexError'));
+                return;
+            }
+
+            // 显示加载状态
+            showMessage('loading', t('loading'));
+
+            // 搜索匹配的设备
+            setTimeout(() => {
+                const results = searchDevices(input);
+
+                if (results.length === 0) {
+                    showMessage('error', t('notFound'));
+                } else if (results.length === 1) {
+                    // 单个结果，直接跳转
+                    showMessage('success', t('found'));
+                    setTimeout(() => {
+                        window.location.href = results[0].filename;
+                    }, 500);
+                } else {
+                    // 多个结果，显示列表
+                    showMessage('success', t('multipleFound', { count: results.length }));
+                    displayDeviceList(results);
+                }
+            }, 300);
+        }
+
+        // 搜索设备
+        function searchDevices(query) {
+            const results = [];
+            const devices = deviceIndex.devices;
+
+            for (const [key, device] of Object.entries(devices)) {
+                // 匹配序列号或 IMEI
+                if (device.serial.toUpperCase().includes(query) ||
+                    device.imei1.includes(query) ||
+                    (device.imei2 && device.imei2.includes(query))) {
+                    results.push(device);
+                }
+            }
+
+            return results;
+        }
+
+        // 显示消息
+        function showMessage(type, message) {
+            const resultDiv = document.getElementById('resultMessage');
+            resultDiv.className = `result-message ${type}`;
+            resultDiv.textContent = message;
+            resultDiv.style.display = 'block';
+        }
+
+        // 显示设备列表
+        function displayDeviceList(devices) {
+            const deviceListDiv = document.getElementById('deviceList');
+            const deviceListContent = document.getElementById('deviceListContent');
+
+            deviceListContent.innerHTML = '';
+
+            devices.forEach(device => {
+                const item = document.createElement('div');
+                item.className = 'device-item';
+                item.onclick = () => window.location.href = device.filename;
+
+                const color = translateColor(device.color, currentLang);
+
+                item.innerHTML = `
+                    <div class="device-info">
+                        <div class="device-model">${device.model_display} ${device.storage}</div>
+                        <div class="device-details">
+                            ${t('color')}: ${color} | ${t('serial')}: ${device.serial}
+                        </div>
+                    </div>
+                    <div class="device-arrow">→</div>
+                `;
+
+                deviceListContent.appendChild(item);
+            });
+
+            deviceListDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
