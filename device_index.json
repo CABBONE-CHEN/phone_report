@@ -1,0 +1,936 @@
+{
+  "generated_at": "2025-12-01T06:12:26.391648",
+  "total_devices": 110,
+  "devices": {
+    "LFQ1XK620H": {
+      "model": "iPhone16ProMax",
+      "model_display": "iPhone 16 Pro Max",
+      "storage": "256GB",
+      "color": "黑色",
+      "serial": "LFQ1XK620H",
+      "imei1": "355688666808400",
+      "imei2": "355688666870905",
+      "filename": "iPhone16ProMax_256GB_黑色_LFQ1XK620H_IMEI-355688666808400_355688666870905.html"
+    },
+    "D1Q69KV996": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "D1Q69KV996",
+      "imei1": "353817905752663",
+      "imei2": "353817905505566",
+      "filename": "iPhone15_128GB_黑色_D1Q69KV996_IMEI-353817905752663_353817905505566.html"
+    },
+    "YJCYJWG14D": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "Pink",
+      "serial": "YJCYJWG14D",
+      "imei1": "356378516951621",
+      "imei2": "356378516495900",
+      "filename": "iPhone13_128GB_Pink_YJCYJWG14D_IMEI-356378516951621_356378516495900.html"
+    },
+    "DNPDVG0X0DYM": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "DNPDVG0X0DYM",
+      "imei1": "354032283932379",
+      "imei2": "354032283860257",
+      "filename": "iPhone12_128GB_白色_DNPDVG0X0DYM_IMEI-354032283932379_354032283860257.html"
+    },
+    "PF7FPLQP3C": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "Blue",
+      "serial": "PF7FPLQP3C",
+      "imei1": "353608671383654",
+      "imei2": "353608671038225",
+      "filename": "iPhone13_128GB_Blue_PF7FPLQP3C_IMEI-353608671383654_353608671038225.html"
+    },
+    "T3QQH6MXWC": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "Blue",
+      "serial": "T3QQH6MXWC",
+      "imei1": "354110233940229",
+      "imei2": "354110233831386",
+      "filename": "iPhone13_128GB_Blue_T3QQH6MXWC_IMEI-354110233940229_354110233831386.html"
+    },
+    "RY73C69HF0": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "RY73C69HF0",
+      "imei1": "354727233584986",
+      "imei2": "354727233887884",
+      "filename": "iPhone13_128GB_蓝色_RY73C69HF0_IMEI-354727233584986_354727233887884.html"
+    },
+    "HLGJWYW50M": {
+      "model": "iPhone15ProMax",
+      "model_display": "iPhone 15 Pro Max",
+      "storage": "256GB",
+      "color": "Black",
+      "serial": "HLGJWYW50M",
+      "imei1": "355364288337729",
+      "imei2": "355364288636252",
+      "filename": "iPhone15ProMax_256GB_Black_HLGJWYW50M_IMEI-355364288337729_355364288636252.html"
+    },
+    "MH59Y2RYCJ": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "MH59Y2RYCJ",
+      "imei1": "354178509191744",
+      "imei2": "354178509687311",
+      "filename": "iPhone16_128GB_黑色_MH59Y2RYCJ_IMEI-354178509191744_354178509687311.html"
+    },
+    "C5HL2H0KG5": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "C5HL2H0KG5",
+      "imei1": "356321252299292",
+      "imei2": "356321252284765",
+      "filename": "iPhone15_128GB_黑色_C5HL2H0KG5_IMEI-356321252299292_356321252284765.html"
+    },
+    "TWKM17JHJF": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "TWKM17JHJF",
+      "imei1": "356129175238960",
+      "imei2": "356129175142873",
+      "filename": "iPhone13_128GB_蓝色_TWKM17JHJF_IMEI-356129175238960_356129175142873.html"
+    },
+    "JC6N069WFK": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "JC6N069WFK",
+      "imei1": "356378516951621",
+      "imei2": "356378516495900",
+      "filename": "iPhone13_128GB_粉色_JC6N069WFK_IMEI-356378516951621_356378516495900.html"
+    },
+    "DHCFW09DX9": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "DHCFW09DX9",
+      "imei1": "351280854275289",
+      "imei2": "351280854168013",
+      "filename": "iPhone16_128GB_黑色_DHCFW09DX9_IMEI-351280854275289_351280854168013.html"
+    },
+    "N39JXWV4RR": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "N39JXWV4RR",
+      "imei1": "355657922193915",
+      "imei2": "355657922109002",
+      "filename": "iPhone13_128GB_白色_N39JXWV4RR_IMEI-355657922193915_355657922109002.html"
+    },
+    "TC6N479GJ9": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "TC6N479GJ9",
+      "imei1": "354029285455870",
+      "imei2": "354029285319019",
+      "filename": "iPhone15_128GB_黑色_TC6N479GJ9_IMEI-354029285455870_354029285319019.html"
+    },
+    "CQ5NXVL46T": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "CQ5NXVL46T",
+      "imei1": "353618265688400",
+      "imei2": "353618265844730",
+      "filename": "iPhone13_128GB_黑色_CQ5NXVL46T_IMEI-353618265688400_353618265844730.html"
+    },
+    "L14XNL7H4J": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "绿色",
+      "serial": "L14XNL7H4J",
+      "imei1": "350390276196236",
+      "imei2": "350390276059863",
+      "filename": "iPhone15_128GB_绿色_L14XNL7H4J_IMEI-350390276196236_350390276059863.html"
+    },
+    "X5PFWKFCYV": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "X5PFWKFCYV",
+      "imei1": "355180950976572",
+      "imei2": "355180950563404",
+      "filename": "iPhone15_128GB_黑色_X5PFWKFCYV_IMEI-355180950976572_355180950563404.html"
+    },
+    "FXPNY40CJ4": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "FXPNY40CJ4",
+      "imei1": "353992316177253",
+      "imei2": "353992316618454",
+      "filename": "iPhone15_128GB_黑色_FXPNY40CJ4_IMEI-353992316177253_353992316618454.html"
+    },
+    "F4V4DYYYHK": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "White",
+      "serial": "F4V4DYYYHK",
+      "imei1": "355103942267595",
+      "imei2": "355103942457170",
+      "filename": "iPhone13_128GB_White_F4V4DYYYHK_IMEI-355103942267595_355103942457170.html"
+    },
+    "FY7Y1HFQVY": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "FY7Y1HFQVY",
+      "imei1": "358355843437738",
+      "imei2": "358355843796562",
+      "filename": "iPhone15_128GB_黑色_FY7Y1HFQVY_IMEI-358355843437738_358355843796562.html"
+    },
+    "KV446GT9GP": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "KV446GT9GP",
+      "imei1": "354029281561317",
+      "imei2": "354029281612847",
+      "filename": "iPhone15_128GB_黑色_KV446GT9GP_IMEI-354029281561317_354029281612847.html"
+    },
+    "X6XWXJPDPG": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "X6XWXJPDPG",
+      "imei1": "356192501961952",
+      "imei2": "356192501875335",
+      "filename": "iPhone13_128GB_白色_X6XWXJPDPG_IMEI-356192501961952_356192501875335.html"
+    },
+    "C4K173J2V2": {
+      "model": "iPhone16ProMax",
+      "model_display": "iPhone 16 Pro Max",
+      "storage": "256GB",
+      "color": "Black",
+      "serial": "C4K173J2V2",
+      "imei1": "353484623314738",
+      "imei2": "",
+      "filename": "iPhone16ProMax_256GB_Black_C4K173J2V2_IMEI-353484623314738.html"
+    },
+    "Y30HQK3DM4": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "Y30HQK3DM4",
+      "imei1": "356378518506837",
+      "imei2": "356378518876388",
+      "filename": "iPhone13_128GB_黑色_Y30HQK3DM4_IMEI-356378518506837_356378518876388.html"
+    },
+    "K9L9G6L29N": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "K9L9G6L29N",
+      "imei1": "357146827427923",
+      "imei2": "357146827494360",
+      "filename": "iPhone15_128GB_粉色_K9L9G6L29N_IMEI-357146827427923_357146827494360.html"
+    },
+    "FPWLN62HFN": {
+      "model": "iPhone15ProMax",
+      "model_display": "iPhone 15 Pro Max",
+      "storage": "256GB",
+      "color": "白色",
+      "serial": "FPWLN62HFN",
+      "imei1": "359897656605496",
+      "imei2": "359897650609403",
+      "filename": "iPhone15ProMax_256GB_白色_FPWLN62HFN_IMEI-359897656605496_359897650609403.html"
+    },
+    "LYN2Q9564G": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "绿色",
+      "serial": "LYN2Q9564G",
+      "imei1": "356166894312379",
+      "imei2": "356166893934868",
+      "filename": "iPhone16_128GB_绿色_LYN2Q9564G_IMEI-356166894312379_356166893934868.html"
+    },
+    "LQXDRJ4VGV": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "LQXDRJ4VGV",
+      "imei1": "350340255064004",
+      "imei2": "350340256366481",
+      "filename": "iPhone16_128GB_粉色_LQXDRJ4VGV_IMEI-350340255064004_350340256366481.html"
+    },
+    "GP21F7QV04": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "White",
+      "serial": "GP21F7QV04",
+      "imei1": "353272715344345",
+      "imei2": "353272715305932",
+      "filename": "iPhone13_128GB_White_GP21F7QV04_IMEI-353272715344345_353272715305932.html"
+    },
+    "HYVQ9XQ4D0": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "HYVQ9XQ4D0",
+      "imei1": "351582376256683",
+      "imei2": "351582376126316",
+      "filename": "iPhone16_128GB_粉色_HYVQ9XQ4D0_IMEI-351582376256683_351582376126316.html"
+    },
+    "LTDT60GVJ2": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "LTDT60GVJ2",
+      "imei1": "358890143395970",
+      "imei2": "358890143117036",
+      "filename": "iPhone13_128GB_黑色_LTDT60GVJ2_IMEI-358890143395970_358890143117036.html"
+    },
+    "D99T41CVH3": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "D99T41CVH3",
+      "imei1": "356207327438892",
+      "imei2": "356207327269172",
+      "filename": "iPhone16_128GB_黑色_D99T41CVH3_IMEI-356207327438892_356207327269172.html"
+    },
+    "DM7THM6XY3": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "Pink",
+      "serial": "DM7THM6XY3",
+      "imei1": "355839994778761",
+      "imei2": "355839995169507",
+      "filename": "iPhone13_128GB_Pink_DM7THM6XY3_IMEI-355839994778761_355839995169507.html"
+    },
+    "DNPDD0WC0DYL": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "DNPDD0WC0DYL",
+      "imei1": "353059117322981",
+      "imei2": "",
+      "filename": "iPhone12_128GB_黑色_DNPDD0WC0DYL_IMEI-353059117322981.html"
+    },
+    "CV77XD4RCQ": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "CV77XD4RCQ",
+      "imei1": "354040288524695",
+      "imei2": "354040288478454",
+      "filename": "iPhone13_128GB_黑色_CV77XD4RCQ_IMEI-354040288524695_354040288478454.html"
+    },
+    "H3XD69HGQ6": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "H3XD69HGQ6",
+      "imei1": "353177642377682",
+      "imei2": "353177642637176",
+      "filename": "iPhone15_128GB_蓝色_H3XD69HGQ6_IMEI-353177642377682_353177642637176.html"
+    },
+    "HV9HXV9WCX": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "HV9HXV9WCX",
+      "imei1": "355678751022835",
+      "imei2": "355678751001573",
+      "filename": "iPhone13_128GB_蓝色_HV9HXV9WCX_IMEI-355678751022835_355678751001573.html"
+    },
+    "FXHR6FLK7G": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "FXHR6FLK7G",
+      "imei1": "358275804558084",
+      "imei2": "358275804637870",
+      "filename": "iPhone13_128GB_白色_FXHR6FLK7G_IMEI-358275804558084_358275804637870.html"
+    },
+    "KJ9Y0QQFV1": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "KJ9Y0QQFV1",
+      "imei1": "351062825564177",
+      "imei2": "351062825647360",
+      "filename": "iPhone13_128GB_蓝色_KJ9Y0QQFV1_IMEI-351062825564177_351062825647360.html"
+    },
+    "M523QDQKFO": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "M523QDQKFO",
+      "imei1": "356166890793333",
+      "imei2": "356166891215849",
+      "filename": "iPhone16_128GB_粉色_M523QDQKFO_IMEI-356166890793333_356166891215849.html"
+    },
+    "DX3G25L70DYL": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "Black",
+      "serial": "DX3G25L70DYL",
+      "imei1": "359637260343146",
+      "imei2": "",
+      "filename": "iPhone12_128GB_Black_DX3G25L70DYL_IMEI-359637260343146.html"
+    },
+    "CR9H79J0MC": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "CR9H79J0MC",
+      "imei1": "356330873477377",
+      "imei2": "356330871847308",
+      "filename": "iPhone16_128GB_黑色_CR9H79J0MC_IMEI-356330873477377_356330871847308.html"
+    },
+    "FFMDR5PGQDYL": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "FFMDR5PGQDYL",
+      "imei1": "355305612294912",
+      "imei2": "",
+      "filename": "iPhone12_128GB_黑色_FFMDR5PGQDYL_IMEI-355305612294912.html"
+    },
+    "DMW5P4W2D9": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "DMW5P4W2D9",
+      "imei1": "350470391256774",
+      "imei2": "350470391032605",
+      "filename": "iPhone16_128GB_蓝色_DMW5P4W2D9_IMEI-350470391256774_350470391032605.html"
+    },
+    "JFQXTVDHDW": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "JFQXTVDHDW",
+      "imei1": "357762266743206",
+      "imei2": "357762267844128",
+      "filename": "iPhone16_128GB_黑色_JFQXTVDHDW_IMEI-357762266743206_357762267844128.html"
+    },
+    "LJ7LFWQX1Y": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "绿色",
+      "serial": "LJ7LFWQX1Y",
+      "imei1": "358019946046735",
+      "imei2": "358019946032933",
+      "filename": "iPhone15_128GB_绿色_LJ7LFWQX1Y_IMEI-358019946046735_358019946032933.html"
+    },
+    "G102LDW37V": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "G102LDW37V",
+      "imei1": "352848534856204",
+      "imei2": "352848534891318",
+      "filename": "iPhone13_128GB_粉色_G102LDW37V_IMEI-352848534856204_352848534891318.html"
+    },
+    "V27NWXFXFY": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "V27NWXFXFY",
+      "imei1": "357542173091232",
+      "imei2": "357542173429739",
+      "filename": "iPhone13_128GB_白色_V27NWXFXFY_IMEI-357542173091232_357542173429739.html"
+    },
+    "GGPVQD14LM": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "GGPVQD14LM",
+      "imei1": "353817902246495",
+      "imei2": "353817902175439",
+      "filename": "iPhone15_128GB_蓝色_GGPVQD14LM_IMEI-353817902246495_353817902175439.html"
+    },
+    "DNQDN58E0DYM": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "DNQDN58E0DYM",
+      "imei1": "354834140652565",
+      "imei2": "",
+      "filename": "iPhone12_128GB_白色_DNQDN58E0DYM_IMEI-354834140652565.html"
+    },
+    "LQQFQX671N": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "LQQFQX671N",
+      "imei1": "354029281561317",
+      "imei2": "354029281612847",
+      "filename": "iPhone15_128GB_黑色_LQQFQX671N_IMEI-354029281561317_354029281612847.html"
+    },
+    "J17J99Q7CG": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "J17J99Q7CG",
+      "imei1": "352848532318355",
+      "imei2": "352848532494016",
+      "filename": "iPhone13_128GB_白色_J17J99Q7CG_IMEI-352848532318355_352848532494016.html"
+    },
+    "J42WPHVC7X": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "Black",
+      "serial": "J42WPHVC7X",
+      "imei1": "353487946562776",
+      "imei2": "353487946541622",
+      "filename": "iPhone13_128GB_Black_J42WPHVC7X_IMEI-353487946562776_353487946541622.html"
+    },
+    "F2WJVKMG02": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "F2WJVKMG02",
+      "imei1": "350753698507456",
+      "imei2": "350753699753745",
+      "filename": "iPhone16_128GB_黑色_F2WJVKMG02_IMEI-350753698507456_350753699753745.html"
+    },
+    "JMFMM2KH9Y": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "JMFMM2KH9Y",
+      "imei1": "350408428781109",
+      "imei2": "350408428449178",
+      "filename": "iPhone13_128GB_白色_JMFMM2KH9Y_IMEI-350408428781109_350408428449178.html"
+    },
+    "K7Q07VC4FV": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "绿色",
+      "serial": "K7Q07VC4FV",
+      "imei1": "358019946807706",
+      "imei2": "358019946941950",
+      "filename": "iPhone15_128GB_绿色_K7Q07VC4FV_IMEI-358019946807706_358019946941950.html"
+    },
+    "CY7F4CVD7D": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "CY7F4CVD7D",
+      "imei1": "353992314963506",
+      "imei2": "353992315711813",
+      "filename": "iPhone15_128GB_黑色_CY7F4CVD7D_IMEI-353992314963506_353992315711813.html"
+    },
+    "JVHP0R2DWF": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "JVHP0R2DWF",
+      "imei1": "353662258895960",
+      "imei2": "353662258852201",
+      "filename": "iPhone15_128GB_粉色_JVHP0R2DWF_IMEI-353662258895960_353662258852201.html"
+    },
+    "FFMDRSPGQDYL": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "FFMDRSPGQDYL",
+      "imei1": "355305612294912",
+      "imei2": "",
+      "filename": "iPhone12_128GB_黑色_FFMDRSPGQDYL_IMEI-355305612294912.html"
+    },
+    "DWFY9C2DJG": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "DWFY9C2DJG",
+      "imei1": "358019941429019",
+      "imei2": "358019941442814",
+      "filename": "iPhone15_128GB_粉色_DWFY9C2DJG_IMEI-358019941429019_358019941442814.html"
+    },
+    "G262132WF9": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "G262132WF9",
+      "imei1": "353177644812751",
+      "imei2": "353177644481441",
+      "filename": "iPhone15_128GB_黑色_G262132WF9_IMEI-353177644812751_353177644481441.html"
+    },
+    "D2592R306Y": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "D2592R306Y",
+      "imei1": "356166894005239",
+      "imei2": "356166894112514",
+      "filename": "iPhone16_128GB_黑色_D2592R306Y_IMEI-356166894005239_356166894112514.html"
+    },
+    "HVYYJ93DMF": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "HVYYJ93DMF",
+      "imei1": "356321254684962",
+      "imei2": "356321254530546",
+      "filename": "iPhone15_128GB_粉色_HVYYJ93DMF_IMEI-356321254684962_356321254530546.html"
+    },
+    "Q04W72LFCF": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "Purple",
+      "serial": "Q04W72LFCF",
+      "imei1": "356599147579982",
+      "imei2": "356599147948864",
+      "filename": "iPhone12_128GB_Purple_Q04W72LFCF_IMEI-356599147579982_356599147948864.html"
+    },
+    "LW47QX9N4H": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "绿色",
+      "serial": "LW47QX9N4H",
+      "imei1": "350753693482846",
+      "imei2": "350753693738726",
+      "filename": "iPhone16_128GB_绿色_LW47QX9N4H_IMEI-350753693482846_350753693738726.html"
+    },
+    "D2512TVMDW": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "D2512TVMDW",
+      "imei1": "356562912346227",
+      "imei2": "356562912381869",
+      "filename": "iPhone15_128GB_粉色_D2512TVMDW_IMEI-356562912346227_356562912381869.html"
+    },
+    "C197Q565QC": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "C197Q565QC",
+      "imei1": "358890148354188",
+      "imei2": "358890148672977",
+      "filename": "iPhone13_128GB_黑色_C197Q565QC_IMEI-358890148354188_358890148672977.html"
+    },
+    "K7R1XGHFJ2": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "K7R1XGHFJ2",
+      "imei1": "351935566834232",
+      "imei2": "351935567191400",
+      "filename": "iPhone16_128GB_黑色_K7R1XGHFJ2_IMEI-351935566834232_351935567191400.html"
+    },
+    "J7KQGMV2P2": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "J7KQGMV2P2",
+      "imei1": "358598529545353",
+      "imei2": "358598529700149",
+      "filename": "iPhone13_128GB_黑色_J7KQGMV2P2_IMEI-358598529545353_358598529700149.html"
+    },
+    "FFPNPC7031": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "FFPNPC7031",
+      "imei1": "351698473488787",
+      "imei2": "351698473285340",
+      "filename": "iPhone15_128GB_黑色_FFPNPC7031_IMEI-351698473488787_351698473285340.html"
+    },
+    "DX3G67X10DYL": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "DX3G67X10DYL",
+      "imei1": "356486510697767",
+      "imei2": "",
+      "filename": "iPhone12_128GB_黑色_DX3G67X10DYL_IMEI-356486510697767.html"
+    },
+    "F4H2JPJ71X": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "F4H2JPJ71X",
+      "imei1": "351935563801242",
+      "imei2": "351935563521576",
+      "filename": "iPhone16_128GB_黑色_F4H2JPJ71X_IMEI-351935563801242_351935563521576.html"
+    },
+    "J2JNPHV2RL": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "J2JNPHV2RL",
+      "imei1": "352156547199392",
+      "imei2": "352156548284854",
+      "filename": "iPhone15_128GB_黑色_J2JNPHV2RL_IMEI-352156547199392_352156548284854.html"
+    },
+    "FFXGLJQFODYL": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "FFXGLJQFODYL",
+      "imei1": "350871923721872",
+      "imei2": "",
+      "filename": "iPhone12_128GB_黑色_FFXGLJQFODYL_IMEI-350871923721872.html"
+    },
+    "K6J7XWKW02": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "K6J7XWKW02",
+      "imei1": "350450244292077",
+      "imei2": "350450244476449",
+      "filename": "iPhone15_128GB_黑色_K6J7XWKW02_IMEI-350450244292077_350450244476449.html"
+    },
+    "G699WVYTX7": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "G699WVYTX7",
+      "imei1": "350753693031049",
+      "imei2": "350753693044331",
+      "filename": "iPhone16_128GB_蓝色_G699WVYTX7_IMEI-350753693031049_350753693044331.html"
+    },
+    "DT6709NWFQ": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "DT6709NWFQ",
+      "imei1": "351048870532979",
+      "imei2": "351048870513623",
+      "filename": "iPhone15_128GB_黑色_DT6709NWFQ_IMEI-351048870532979_351048870513623.html"
+    },
+    "NHTX7YJPHP": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "NHTX7YJPHP",
+      "imei1": "352603148672178",
+      "imei2": "352603148730224",
+      "filename": "iPhone13_128GB_白色_NHTX7YJPHP_IMEI-352603148672178_352603148730224.html"
+    },
+    "MTX33V46T3": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "MTX33V46T3",
+      "imei1": "359696883416986",
+      "imei2": "359696883162309",
+      "filename": "iPhone16_128GB_黑色_MTX33V46T3_IMEI-359696883416986_359696883162309.html"
+    },
+    "HNVJ0MHYPN": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "HNVJ0MHYPN",
+      "imei1": "353887191938482",
+      "imei2": "353887191762379",
+      "filename": "iPhone15_128GB_黑色_HNVJ0MHYPN_IMEI-353887191938482_353887191762379.html"
+    },
+    "KVPMJJQ66K": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "KVPMJJQ66K",
+      "imei1": "351335416937659",
+      "imei2": "351335416801558",
+      "filename": "iPhone15_128GB_粉色_KVPMJJQ66K_IMEI-351335416937659_351335416801558.html"
+    },
+    "KGD61WDJTH": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "KGD61WDJTH",
+      "imei1": "350470396688286",
+      "imei2": "350470398896838",
+      "filename": "iPhone16_128GB_蓝色_KGD61WDJTH_IMEI-350470396688286_350470398896838.html"
+    },
+    "FG1DM1FV0DYM": {
+      "model": "iPhone12",
+      "model_display": "iPhone 12",
+      "storage": "128GB",
+      "color": "白色",
+      "serial": "FG1DM1FV0DYM",
+      "imei1": "359105970865816",
+      "imei2": "359105970900415",
+      "filename": "iPhone12_128GB_白色_FG1DM1FV0DYM_IMEI-359105970865816_359105970900415.html"
+    },
+    "M434D3W426": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "M434D3W426",
+      "imei1": "356330873664958",
+      "imei2": "356330873087648",
+      "filename": "iPhone16_128GB_粉色_M434D3W426_IMEI-356330873664958_356330873087648.html"
+    },
+    "DKJ34N3TWQ": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "DKJ34N3TWQ",
+      "imei1": "358019942575281",
+      "imei2": "358019942610831",
+      "filename": "iPhone15_128GB_黑色_DKJ34N3TWQ_IMEI-358019942575281_358019942610831.html"
+    },
+    "QGYX42Y0KG": {
+      "model": "iPhone13",
+      "model_display": "iPhone 13",
+      "storage": "128GB",
+      "color": "粉色",
+      "serial": "QGYX42Y0KG",
+      "imei1": "355657929492294",
+      "imei2": "355657929966909",
+      "filename": "iPhone13_128GB_粉色_QGYX42Y0KG_IMEI-355657929492294_355657929966909.html"
+    },
+    "FK2RLV7M6J": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "FK2RLV7M6J",
+      "imei1": "350470392669314",
+      "imei2": "350470392257755",
+      "filename": "iPhone16_128GB_黑色_FK2RLV7M6J_IMEI-350470392669314_350470392257755.html"
+    },
+    "C7PP2CDPQC": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "蓝色",
+      "serial": "C7PP2CDPQC",
+      "imei1": "354104351722188",
+      "imei2": "354104352474995",
+      "filename": "iPhone16_128GB_蓝色_C7PP2CDPQC_IMEI-354104351722188_354104352474995.html"
+    },
+    "D56Y7Y2K9N": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "D56Y7Y2K9N",
+      "imei1": "358019946606959",
+      "imei2": "358019946568290",
+      "filename": "iPhone15_128GB_黑色_D56Y7Y2K9N_IMEI-358019946606959_358019946568290.html"
+    },
+    "J2XXP64QGT": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "绿色",
+      "serial": "J2XXP64QGT",
+      "imei1": "353476382310592",
+      "imei2": "353476382069818",
+      "filename": "iPhone15_128GB_绿色_J2XXP64QGT_IMEI-353476382310592_353476382069818.html"
+    },
+    "HWD97RW60T": {
+      "model": "iPhone16",
+      "model_display": "iPhone 16",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "HWD97RW60T",
+      "imei1": "353372659260570",
+      "imei2": "353372659005983",
+      "filename": "iPhone16_128GB_黑色_HWD97RW60T_IMEI-353372659260570_353372659005983.html"
+    },
+    "D6GXY5VF24": {
+      "model": "iPhone15",
+      "model_display": "iPhone 15",
+      "storage": "128GB",
+      "color": "黑色",
+      "serial": "D6GXY5VF24",
+      "imei1": "357770202744782",
+      "imei2": "357770202722390",
+      "filename": "iPhone15_128GB_黑色_D6GXY5VF24_IMEI-357770202744782_357770202722390.html"
+    }
+  }
+}
