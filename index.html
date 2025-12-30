@@ -353,10 +353,6 @@
         </div>
     </div>
 
-    <!-- 引入设备数据库和 Mock 报告生成器 -->
-    <script src="device_database.js"></script>
-    <script src="mock_report_generator.js"></script>
-
     <script>
         // 多语言翻译配置
         const translations = {
@@ -378,9 +374,6 @@
                 color: '颜色',
                 serial: '序列号',
                 verified: '已验机',
-                mockReport: '模拟报告',
-                deviceIdentified: '已识别设备型号，可生成模拟报告',
-                generatingMock: '正在生成模拟报告...',
                 imei: 'IMEI'
             },
             en: {
@@ -401,9 +394,6 @@
                 color: 'Color',
                 serial: 'Serial',
                 verified: 'Verified',
-                mockReport: 'Mock Report',
-                deviceIdentified: 'Device model identified, mock report available',
-                generatingMock: 'Generating mock report...',
                 imei: 'IMEI'
             },
             es: {
@@ -424,9 +414,6 @@
                 color: 'Color',
                 serial: 'Serie',
                 verified: 'Verificado',
-                mockReport: 'Informe Simulado',
-                deviceIdentified: 'Modelo identificado, informe simulado disponible',
-                generatingMock: 'Generando informe simulado...',
                 imei: 'IMEI'
             }
         };
@@ -536,16 +523,6 @@
             return translation ? translation[lang] : colorZh;
         }
 
-        // 检查输入是否为 IMEI (15位数字)
-        function isIMEI(input) {
-            return /^\d{15}$/.test(input);
-        }
-
-        // 检查输入是否为序列号
-        function isSerial(input) {
-            return /^[A-Z0-9]{10,12}$/.test(input);
-        }
-
         // 执行查询
         function performQuery() {
             const input = document.getElementById('serialInput').value.trim().toUpperCase();
@@ -587,32 +564,8 @@
                     return;
                 }
 
-                // 2. 没有找到已验机设备，尝试通过 IMEI/序列号识别设备型号
-                let deviceInfo = null;
-                let identifierType = '';
-                let identifierValue = input;
-
-                if (isIMEI(input)) {
-                    // 尝试通过 IMEI 识别设备
-                    deviceInfo = DeviceDatabase.lookupByIMEI(input);
-                    identifierType = 'imei';
-                } else if (isSerial(input)) {
-                    // 尝试解析序列号
-                    const serialInfo = DeviceDatabase.parseSerial(input);
-                    if (serialInfo && serialInfo.type === 'random') {
-                        // 新款随机序列号，无法直接识别，但可以尝试部分匹配
-                        identifierType = 'serial';
-                    }
-                }
-
-                if (deviceInfo) {
-                    // 成功识别设备型号，显示生成 Mock 报告的选项
-                    showMessage('info', t('deviceIdentified'));
-                    displayMockOption(deviceInfo, identifierType, identifierValue);
-                } else {
-                    // 完全无法识别
-                    showMessage('error', t('notFound'));
-                }
+                // 未找到设备
+                showMessage('error', t('notFound'));
             }, 300);
         }
 
@@ -680,67 +633,6 @@
             deviceListDiv.style.display = 'block';
         }
 
-        // 显示 Mock 报告选项
-        function displayMockOption(deviceInfo, identifierType, identifierValue) {
-            const deviceListDiv = document.getElementById('deviceList');
-            const deviceListContent = document.getElementById('deviceListContent');
-
-            deviceListContent.innerHTML = '';
-
-            const item = document.createElement('div');
-            item.className = 'device-item mock';
-            item.onclick = () => generateAndShowMockReport(deviceInfo, identifierType, identifierValue);
-
-            const badge = `<span class="device-badge mock">${t('mockReport')}</span>`;
-
-            item.innerHTML = `
-                <div class="device-info">
-                    <div class="device-model">${deviceInfo.name}${badge}</div>
-                    <div class="device-details">
-                        ${t(identifierType)}: ${identifierValue}
-                    </div>
-                </div>
-                <div class="device-arrow">→</div>
-            `;
-
-            deviceListContent.appendChild(item);
-            deviceListDiv.style.display = 'block';
-        }
-
-        // 生成并显示 Mock 报告
-        function generateAndShowMockReport(deviceInfo, identifierType, identifierValue) {
-            showMessage('loading', t('generatingMock'));
-
-            setTimeout(() => {
-                // 生成 Mock 报告 HTML
-                const imei = identifierType === 'imei' ? identifierValue : '';
-                const serial = identifierType === 'serial' ? identifierValue : generateRandomSerial();
-
-                const reportHTML = MockReportGenerator.generateReportHTML(
-                    deviceInfo,
-                    imei,
-                    serial,
-                    currentLang
-                );
-
-                // 在新窗口中打开报告
-                const newWindow = window.open('', '_blank');
-                newWindow.document.write(reportHTML);
-                newWindow.document.close();
-
-                showMessage('success', t('found'));
-            }, 500);
-        }
-
-        // 生成随机序列号 (10位，用于新款 iPhone)
-        function generateRandomSerial() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
-            let serial = '';
-            for (let i = 0; i < 10; i++) {
-                serial += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return serial;
-        }
     </script>
 </body>
 </html>
