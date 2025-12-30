@@ -175,6 +175,13 @@
             display: block;
         }
 
+        .result-message.info {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            display: block;
+        }
+
         /* 设备列表 */
         .device-list {
             margin-top: 24px;
@@ -207,6 +214,15 @@
             border-color: #1e3a8a;
         }
 
+        .device-item.mock {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+
+        .device-item.mock:hover {
+            background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+        }
+
         .device-info {
             flex: 1;
         }
@@ -221,6 +237,24 @@
             font-size: 13px;
             color: #86868b;
             margin-top: 4px;
+        }
+
+        .device-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+
+        .device-badge.verified {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .device-badge.mock {
+            background-color: #fef3c7;
+            color: #92400e;
         }
 
         .device-arrow {
@@ -319,6 +353,10 @@
         </div>
     </div>
 
+    <!-- 引入设备数据库和 Mock 报告生成器 -->
+    <script src="device_database.js"></script>
+    <script src="mock_report_generator.js"></script>
+
     <script>
         // 多语言翻译配置
         const translations = {
@@ -338,7 +376,12 @@
                 indexError: '无法加载设备索引，请稍后重试',
                 storage: '容量',
                 color: '颜色',
-                serial: '序列号'
+                serial: '序列号',
+                verified: '已验机',
+                mockReport: '模拟报告',
+                deviceIdentified: '已识别设备型号，可生成模拟报告',
+                generatingMock: '正在生成模拟报告...',
+                imei: 'IMEI'
             },
             en: {
                 title: 'iPhone Inspection Report',
@@ -356,7 +399,12 @@
                 indexError: 'Unable to load device index. Please try again later.',
                 storage: 'Storage',
                 color: 'Color',
-                serial: 'Serial'
+                serial: 'Serial',
+                verified: 'Verified',
+                mockReport: 'Mock Report',
+                deviceIdentified: 'Device model identified, mock report available',
+                generatingMock: 'Generating mock report...',
+                imei: 'IMEI'
             },
             es: {
                 title: 'Informe de Inspección iPhone',
@@ -374,7 +422,12 @@
                 indexError: 'No se puede cargar el índice. Intente más tarde.',
                 storage: 'Capacidad',
                 color: 'Color',
-                serial: 'Serie'
+                serial: 'Serie',
+                verified: 'Verificado',
+                mockReport: 'Informe Simulado',
+                deviceIdentified: 'Modelo identificado, informe simulado disponible',
+                generatingMock: 'Generando informe simulado...',
+                imei: 'IMEI'
             }
         };
 
@@ -430,9 +483,13 @@
                     console.log('Device index loaded:', Object.keys(deviceIndex.devices).length, 'devices');
                 } else {
                     console.error('Failed to load device index');
+                    // 即使索引加载失败，也允许使用 Mock 功能
+                    deviceIndex = { devices: {} };
                 }
             } catch (error) {
                 console.error('Error loading device index:', error);
+                // 即使索引加载失败，也允许使用 Mock 功能
+                deviceIndex = { devices: {} };
             }
         }
 
@@ -479,6 +536,16 @@
             return translation ? translation[lang] : colorZh;
         }
 
+        // 检查输入是否为 IMEI (15位数字)
+        function isIMEI(input) {
+            return /^\d{15}$/.test(input);
+        }
+
+        // 检查输入是否为序列号
+        function isSerial(input) {
+            return /^[A-Z0-9]{10,12}$/.test(input);
+        }
+
         // 执行查询
         function performQuery() {
             const input = document.getElementById('serialInput').value.trim().toUpperCase();
@@ -498,38 +565,62 @@
                 return;
             }
 
-            // 检查索引是否加载
-            if (!deviceIndex) {
-                showMessage('error', t('indexError'));
-                return;
-            }
-
             // 显示加载状态
             showMessage('loading', t('loading'));
 
             // 搜索匹配的设备
             setTimeout(() => {
-                const results = searchDevices(input);
+                // 1. 首先在已验机设备索引中搜索
+                const verifiedResults = searchVerifiedDevices(input);
 
-                if (results.length === 0) {
-                    showMessage('error', t('notFound'));
-                } else if (results.length === 1) {
-                    // 单个结果，直接跳转
-                    showMessage('success', t('found'));
-                    setTimeout(() => {
-                        window.location.href = results[0].filename;
-                    }, 500);
+                if (verifiedResults.length > 0) {
+                    // 找到已验机设备
+                    if (verifiedResults.length === 1) {
+                        showMessage('success', t('found'));
+                        setTimeout(() => {
+                            window.location.href = verifiedResults[0].filename;
+                        }, 500);
+                    } else {
+                        showMessage('success', t('multipleFound', { count: verifiedResults.length }));
+                        displayDeviceList(verifiedResults, true);
+                    }
+                    return;
+                }
+
+                // 2. 没有找到已验机设备，尝试通过 IMEI/序列号识别设备型号
+                let deviceInfo = null;
+                let identifierType = '';
+                let identifierValue = input;
+
+                if (isIMEI(input)) {
+                    // 尝试通过 IMEI 识别设备
+                    deviceInfo = DeviceDatabase.lookupByIMEI(input);
+                    identifierType = 'imei';
+                } else if (isSerial(input)) {
+                    // 尝试解析序列号
+                    const serialInfo = DeviceDatabase.parseSerial(input);
+                    if (serialInfo && serialInfo.type === 'random') {
+                        // 新款随机序列号，无法直接识别，但可以尝试部分匹配
+                        identifierType = 'serial';
+                    }
+                }
+
+                if (deviceInfo) {
+                    // 成功识别设备型号，显示生成 Mock 报告的选项
+                    showMessage('info', t('deviceIdentified'));
+                    displayMockOption(deviceInfo, identifierType, identifierValue);
                 } else {
-                    // 多个结果，显示列表
-                    showMessage('success', t('multipleFound', { count: results.length }));
-                    displayDeviceList(results);
+                    // 完全无法识别
+                    showMessage('error', t('notFound'));
                 }
             }, 300);
         }
 
-        // 搜索设备
-        function searchDevices(query) {
+        // 搜索已验机设备
+        function searchVerifiedDevices(query) {
             const results = [];
+            if (!deviceIndex || !deviceIndex.devices) return results;
+
             const devices = deviceIndex.devices;
 
             for (const [key, device] of Object.entries(devices)) {
@@ -553,7 +644,7 @@
         }
 
         // 显示设备列表
-        function displayDeviceList(devices) {
+        function displayDeviceList(devices, isVerified = true) {
             const deviceListDiv = document.getElementById('deviceList');
             const deviceListContent = document.getElementById('deviceListContent');
 
@@ -561,14 +652,17 @@
 
             devices.forEach(device => {
                 const item = document.createElement('div');
-                item.className = 'device-item';
+                item.className = 'device-item' + (isVerified ? '' : ' mock');
                 item.onclick = () => window.location.href = device.filename;
 
                 const color = translateColor(device.color, currentLang);
+                const badge = isVerified
+                    ? `<span class="device-badge verified">${t('verified')}</span>`
+                    : `<span class="device-badge mock">${t('mockReport')}</span>`;
 
                 item.innerHTML = `
                     <div class="device-info">
-                        <div class="device-model">${device.model_display} ${device.storage}</div>
+                        <div class="device-model">${device.model_display} ${device.storage}${badge}</div>
                         <div class="device-details">
                             ${t('color')}: ${color} | ${t('serial')}: ${device.serial}
                         </div>
@@ -580,6 +674,68 @@
             });
 
             deviceListDiv.style.display = 'block';
+        }
+
+        // 显示 Mock 报告选项
+        function displayMockOption(deviceInfo, identifierType, identifierValue) {
+            const deviceListDiv = document.getElementById('deviceList');
+            const deviceListContent = document.getElementById('deviceListContent');
+
+            deviceListContent.innerHTML = '';
+
+            const item = document.createElement('div');
+            item.className = 'device-item mock';
+            item.onclick = () => generateAndShowMockReport(deviceInfo, identifierType, identifierValue);
+
+            const badge = `<span class="device-badge mock">${t('mockReport')}</span>`;
+
+            item.innerHTML = `
+                <div class="device-info">
+                    <div class="device-model">${deviceInfo.name}${badge}</div>
+                    <div class="device-details">
+                        ${t(identifierType)}: ${identifierValue}
+                    </div>
+                </div>
+                <div class="device-arrow">→</div>
+            `;
+
+            deviceListContent.appendChild(item);
+            deviceListDiv.style.display = 'block';
+        }
+
+        // 生成并显示 Mock 报告
+        function generateAndShowMockReport(deviceInfo, identifierType, identifierValue) {
+            showMessage('loading', t('generatingMock'));
+
+            setTimeout(() => {
+                // 生成 Mock 报告 HTML
+                const imei = identifierType === 'imei' ? identifierValue : '';
+                const serial = identifierType === 'serial' ? identifierValue : generateRandomSerial();
+
+                const reportHTML = MockReportGenerator.generateReportHTML(
+                    deviceInfo,
+                    imei,
+                    serial,
+                    currentLang
+                );
+
+                // 在新窗口中打开报告
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(reportHTML);
+                newWindow.document.close();
+
+                showMessage('success', t('found'));
+            }, 500);
+        }
+
+        // 生成随机序列号 (10位，用于新款 iPhone)
+        function generateRandomSerial() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
+            let serial = '';
+            for (let i = 0; i < 10; i++) {
+                serial += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return serial;
         }
     </script>
 </body>
