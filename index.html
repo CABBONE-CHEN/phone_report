@@ -628,6 +628,8 @@
                 if (device.serial.toUpperCase().includes(query) ||
                     device.imei1.includes(query) ||
                     (device.imei2 && device.imei2.includes(query))) {
+                    // 添加跳转链接
+                    device.filename = 'report.html?serial=' + encodeURIComponent(device.serial);
                     results.push(device);
                 }
             }
@@ -655,16 +657,18 @@
                 item.className = 'device-item' + (isVerified ? '' : ' mock');
                 item.onclick = () => window.location.href = device.filename;
 
-                const color = translateColor(device.color, currentLang);
                 const badge = isVerified
                     ? `<span class="device-badge verified">${t('verified')}</span>`
                     : `<span class="device-badge mock">${t('mockReport')}</span>`;
 
+                // 使用 model_display 或 model
+                const modelName = device.model_display || device.model;
+
                 item.innerHTML = `
                     <div class="device-info">
-                        <div class="device-model">${device.model_display} ${device.storage}${badge}</div>
+                        <div class="device-model">${modelName} ${device.storage}${badge}</div>
                         <div class="device-details">
-                            ${t('color')}: ${color} | ${t('serial')}: ${device.serial}
+                            ${t('serial')}: ${device.serial} | ${t('imei')}: ${device.imei1}
                         </div>
                     </div>
                     <div class="device-arrow">→</div>
